@@ -1,0 +1,47 @@
+
+.image-link-form {
+    margin-top: 100px;
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 5px 5px 20px -8px black;
+}
+
+.image-link-form p {
+    margin-top: 0;
+    font-size: 26px;
+}
+
+.image-link-form div {
+    display: flex;
+    column-gap: 12px;
+    justify-content: center;
+}
+
+.image-link-form input {
+    padding: 4px;
+    border: 1px solid #252525;
+    border-radius: 8px;
+    outline: none;
+    font-size: 22px;
+    transition: .15s;
+}
+
+.image-link-form input:focus {
+    background-color: rgb(72, 72, 72);
+}
+
+.image-link-form button {
+    transition: .2s;
+}
+
+.image-link-form button:hover {
+    background-color: rgb(38, 38, 38);
+}
+
+.image-link-form button:focus {
+    outline: none;
+}
+
+.image-link-form button:active {
+    background-color: rgb(50, 50, 50);
+}
