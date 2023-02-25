@@ -2,17 +2,9 @@
 .navigation {
     display: flex;
     flex-direction: row;
-    align-items: baseline;
+    align-items: center;
 }
 
 h1 {
     margin: 0 auto;
-}
-
-a {
-    font-size: 30px;
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
 }
