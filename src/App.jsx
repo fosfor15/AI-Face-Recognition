@@ -1,4 +1,4 @@
-import Navigation from './components/Navigation/navigation';
+import Navigation from './components/Navigation/Navigation';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import './App.css';
 

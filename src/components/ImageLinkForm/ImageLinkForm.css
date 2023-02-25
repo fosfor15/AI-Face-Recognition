@@ -19,6 +19,7 @@
 
 .image-link-form input {
     padding: 4px;
+    background-color: rgba(135, 135, 135, 0.25);
     border: 1px solid #252525;
     border-radius: 8px;
     outline: none;
