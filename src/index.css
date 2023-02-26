@@ -4,7 +4,7 @@
     font-weight: 400;
 
     color-scheme: light dark;
-    color: rgb(33, 33, 33);
+    color: #c8c8c8;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -17,8 +17,7 @@ body {
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
-
-    background-image: linear-gradient(135deg, rgb(253, 255, 111), rgb(4, 117, 254));
+    background-image: linear-gradient(180deg, #170a4d, #3f42b0);
 }
 
 h1 {
@@ -27,7 +26,7 @@ h1 {
 }
 
 a {
-    color: #1a1a1a;
+    color: inherit;
 }
 
 button {
@@ -37,31 +36,8 @@ button {
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
-    background-color: #1a1a1a;
+    background-color: #ffffffb3;
+    color: #1a0a5a;
     cursor: pointer;
     transition: border-color 0.25s;
-}
-
-button:hover {
-    border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
-
-    a:hover {
-        color: #747bff;
-    }
-
-    button {
-        background-color: #f9f9f9;
-    }
 }

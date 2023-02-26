@@ -21,7 +21,7 @@
 
 .image-link-form input {
     padding: 4px;
-    background-color: rgba(135, 135, 135, 0.25);
+    background-color: #87878740;
     border: 1px solid #252525;
     border-radius: 8px;
     outline: none;
@@ -30,7 +30,7 @@
 }
 
 .image-link-form input:focus {
-    background-color: rgb(72, 72, 72);
+    background-color: #87878758;
 }
 
 .image-link-form button {
@@ -38,7 +38,7 @@
 }
 
 .image-link-form button:hover {
-    background-color: rgb(38, 38, 38);
+    background-color: #ffffffe9;
 }
 
 .image-link-form button:focus {
@@ -46,5 +46,5 @@
 }
 
 .image-link-form button:active {
-    background-color: rgb(50, 50, 50);
+    background-color: #acadff;
 }

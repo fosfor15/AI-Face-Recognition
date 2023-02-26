@@ -11,7 +11,9 @@
     "dependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-parallax-tilt": "^1.7.107"
+        "react-parallax-tilt": "^1.7.107",
+        "react-particles": "^2.9.3",
+        "tsparticles": "^2.9.3"
     },
     "devDependencies": {
         "@types/react": "^18.0.27",
