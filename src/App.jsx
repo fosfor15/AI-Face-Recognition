@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Particles from 'react-particles';
 import { loadFull } from 'tsparticles';
@@ -12,6 +12,13 @@ import './App.css';
 
 
 function App() {
+    const [ imageUrl, setImageUrl ] = useState('');
+
+    const inputImageUrl = _imageUrl => {
+        setImageUrl(_imageUrl);
+        console.log('imageUrl :>> ', imageUrl);
+    };
+
     const particlesInit = useCallback(async engine => {
         await loadFull(engine);
     }, []);
@@ -20,11 +27,13 @@ function App() {
         <div className="App">
             <Navigation />
             <Rank />
-            <ImageLinkForm />
+            <ImageLinkForm
+                inputImageUrl={ inputImageUrl }
+            />
             <Particles
                 id="tsparticles"
-                options={tsParticlesOptions}
-                init={particlesInit}
+                options={ tsParticlesOptions }
+                init={ particlesInit }
             />
         </div>
     );
