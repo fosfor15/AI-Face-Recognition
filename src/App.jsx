@@ -13,8 +13,8 @@ import './App.css';
 
 
 const PAT = '34fb1e287c294f418d8d93cbcd002a67';
-const USER_ID = 'fosfor15';
-const APP_ID = 'AI-Face-Recognition';
+const USER_ID = 'clarifai';
+const APP_ID = 'main';
 const MODEL_ID = 'face-detection';
 
 
@@ -59,10 +59,13 @@ function App() {
         )
         .then(response => response.json())
         .then(response => {
-            console.log(response);
             console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
         })
         .catch(error => console.log('error', error));
+
+        setTimeout(() => {
+            document.getElementsByClassName('image-recognition-result')[0].scrollIntoView(true);
+        }, 50);
     };
 
     // const imageRecognitionResult = '';

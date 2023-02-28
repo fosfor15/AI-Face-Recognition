@@ -2,12 +2,12 @@
 .image-recognition-result {
     max-width: 800px;
     min-width: 380px;
-    margin: 40px auto 0;
-    border-radius: 8px;
-    overflow: hidden;
+    margin: 10px auto 0;
+    padding-top: 30px;
     text-align: center;
 }
 
 .image-recognition-result img {
     width: 100%;
+    border-radius: 8px;
 }

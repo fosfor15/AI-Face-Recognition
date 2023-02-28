@@ -1,16 +1,13 @@
 import './ImageRecognitionResult.css';
 
 const ImageRecognitionResult = ({ imageUrl }) => {
-    if (!imageUrl) {
-        return;
-    }
-
     return (
         <div className="image-recognition-result">
+            { imageUrl &&
             <img
                 src={ imageUrl }
                 alt='Image recognition result'
-            />
+            /> }
         </div>
     );
 };
