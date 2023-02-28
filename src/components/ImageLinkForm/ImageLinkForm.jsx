@@ -6,7 +6,14 @@ const ImageLinkForm = ({ inputImageUrl }) => {
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
+
+        if (!imageUrlInput.current.value) {
+            console.log('Process is stopped due to no image URL');
+            return;
+        }
+
         inputImageUrl(imageUrlInput.current.value);
+        imageUrlInput.current.value = '';
     };
 
     return (
@@ -18,7 +25,6 @@ const ImageLinkForm = ({ inputImageUrl }) => {
             <div>
                 <input
                     type='search'
-                    defaultValue='https://arthive.net/res/media/img/oy1200/work/5f4/382200@2x.jpg'
                     ref={ imageUrlInput }
                 />
                 <button type='submit'>Detect</button>

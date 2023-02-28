@@ -11,3 +11,12 @@
     width: 100%;
     border-radius: 8px;
 }
+
+.relative-container {
+    position: relative;
+}
+
+.bounding-box {
+    position: absolute;
+    border: 3px solid #1953f0;
+}

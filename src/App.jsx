@@ -24,8 +24,9 @@ function App() {
     }, []);
 
     const [ imageUrl, setImageUrl ] = useState('');
+    const [ boundingBox, setBoundingBox ] = useState(null);
 
-    const inputImageUrl = imageUrl => {
+    const inputImageUrl = (imageUrl) => {
         setImageUrl(imageUrl);
 
         const body = {
@@ -53,13 +54,26 @@ function App() {
             body: JSON.stringify(body)
         };
 
+        setBoundingBox(null);
+
         fetch(
             `https://api.clarifai.com/v2/models/${MODEL_ID}/outputs`,
             requestOptions
         )
         .then(response => response.json())
         .then(response => {
-            console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
+            const rawBoundingBox = response.outputs[0].data.regions[0].region_info.bounding_box;
+            const boundingBox = {};
+
+            for (let [ side, coord ] of Object.entries(rawBoundingBox)) {
+                if (side == 'right_col' || side == 'bottom_row') {
+                    coord = 1 - coord;
+                }
+
+                boundingBox[ side.match(/(\w+)_/)[1] ] = (coord * 1e2).toFixed(2) + '%';
+            }
+
+            setBoundingBox(boundingBox);
         })
         .catch(error => console.log('error', error));
 
@@ -84,6 +98,7 @@ function App() {
             />
             <ImageRecognitionResult
                 imageUrl={ imageUrl }
+                boundingBox={ boundingBox }
             />
         </div>
     );
