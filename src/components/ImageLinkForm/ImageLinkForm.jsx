@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import { createRef } from 'react';
 import './ImageLinkForm.css';
 
 const ImageLinkForm = ({ inputImageUrl }) => {
@@ -18,6 +18,7 @@ const ImageLinkForm = ({ inputImageUrl }) => {
             <div>
                 <input
                     type='search'
+                    defaultValue='https://arthive.net/res/media/img/oy1200/work/5f4/382200@2x.jpg'
                     ref={ imageUrlInput }
                 />
                 <button type='submit'>Detect</button>
