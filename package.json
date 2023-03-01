@@ -4,7 +4,7 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite --port 3000 --open true",
+        "dev": "vite --port 3000 --open",
         "build": "vite build",
         "preview": "vite preview"
     },
@@ -13,6 +13,7 @@
         "react-dom": "^18.2.0",
         "react-parallax-tilt": "^1.7.107",
         "react-particles": "^2.9.3",
+        "react-router-dom": "^6.8.2",
         "tsparticles": "^2.9.3"
     },
     "devDependencies": {

@@ -19,9 +19,13 @@
 }
 
 .sign-in-form input {
-    width: 280px;
+    width: 290px;
 }
 
 .sign-in-form button {
     margin-top: 20px;
+}
+
+.sign-in-form a {
+    font-size: 16px;
 }

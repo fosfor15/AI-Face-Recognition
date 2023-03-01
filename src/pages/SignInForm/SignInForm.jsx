@@ -1,7 +1,16 @@
-import { createRef } from 'react';
+import { useContext } from 'react';
+import AuthContext from '../../context/AuthContext';
 import './SignInForm.css';
 
+
 const SignInForm = () => {
+    const { setAuth } = useContext(AuthContext);
+
+    const signIn = () => {
+        setAuth(true);
+        localStorage.setItem('isAuth', 'true');
+    };
+
     return (
         <form className="sign-in-form">
             <h2>Sign in</h2>
@@ -24,6 +33,7 @@ const SignInForm = () => {
 
             <button
                 type="submit"
+                onClick={ signIn }
             >Sign in</button>
 
             <a href="#">Register</a>
