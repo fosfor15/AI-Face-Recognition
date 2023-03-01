@@ -2,10 +2,6 @@
 .image-link-form {
     max-width: 800px;
     min-width: 380px;
-    margin: 80px auto 0;
-    padding: 22px;
-    border-radius: 16px;
-    box-shadow: 5px 5px 20px -8px black;
 }
 
 .image-link-form p {
@@ -20,31 +16,5 @@
 }
 
 .image-link-form input {
-    padding: 4px;
-    background-color: #87878740;
-    border: 1px solid #252525;
-    border-radius: 8px;
-    outline: none;
-    font-size: 22px;
-    transition: .15s;
-}
-
-.image-link-form input:focus {
-    background-color: #87878758;
-}
-
-.image-link-form button {
-    transition: .2s;
-}
-
-.image-link-form button:hover {
-    background-color: #ffffffe9;
-}
-
-.image-link-form button:focus {
-    outline: none;
-}
-
-.image-link-form button:active {
-    background-color: #acadff;
+    width: 340px;
 }

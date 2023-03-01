@@ -5,11 +5,12 @@ import { loadFull } from 'tsparticles';
 import tsParticlesOptions from './assets/particles.json';
 
 import Navigation from './components/Navigation/Navigation';
+import SignInForm from './components/SignInForm/SignInForm';
 import Rank from './components/Rank/Rank';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import ImageRecognitionResult from './components/ImageRecognitionResult/ImageRecognitionResult';
 
-import './App.css';
+import './styles/App.css';
 
 
 const PAT = '34fb1e287c294f418d8d93cbcd002a67';
@@ -82,8 +83,6 @@ function App() {
         }, 50);
     };
 
-    // const imageRecognitionResult = '';
-
     return (
         <div className="App">
             <Particles
@@ -92,6 +91,7 @@ function App() {
                 init={ particlesInit }
             />
             <Navigation />
+            <SignInForm />    
             <Rank />
             <ImageLinkForm
                 inputImageUrl={ inputImageUrl }

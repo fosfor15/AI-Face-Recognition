@@ -21,10 +21,6 @@
     user-select: none;
 }
 
-a {
+.logo a {
     font-size: 30px;
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
 }
