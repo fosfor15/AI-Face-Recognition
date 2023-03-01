@@ -1,6 +1,9 @@
 import { useContext } from 'react';
-import AuthContext from '../../context/AuthContext';
-import './SignInForm.css';
+import AuthContext from '../context/AuthContext';
+
+import { Link } from 'react-router-dom';
+
+import '../styles/AuthForms.css';
 
 
 const SignInForm = () => {
@@ -36,7 +39,7 @@ const SignInForm = () => {
                 onClick={ signIn }
             >Sign in</button>
 
-            <a href="#">Register</a>
+            <Link to="/registration">Register</Link>
         </form>
     );
 }

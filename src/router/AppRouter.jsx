@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 
-import { publicRoutes, privateRoutes } from './routes';
+import { publicRoutes, privateRoutes } from './Routes';
 import { RouterProvider } from 'react-router-dom';
 
 

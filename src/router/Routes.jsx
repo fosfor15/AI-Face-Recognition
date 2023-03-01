@@ -1,11 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom';
-import SignInForm from '../pages/SignInForm/SignInForm';
+
+import SignInForm from '../pages/SignInForm';
+import RegistrationForm from '../pages/RegistrationForm';
 import ImageRecognition from '../pages/ImageRecognition';
+
 
 const publicRoutes = createBrowserRouter([
     {
         path: '/',
         element: <SignInForm />
+    },
+    {
+        path: '/registration',
+        element: <RegistrationForm />
     }
 ]);
 
