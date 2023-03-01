@@ -11,5 +11,6 @@ body {
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
-    background-image: linear-gradient(180deg, #0c0332, #6ba8ef);
+    background-image: linear-gradient(180deg, #0c0332, #6ba8ef, #85baf7);
+    background-size: 100% 1800px;
 }
