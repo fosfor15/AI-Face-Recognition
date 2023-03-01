@@ -1,33 +1,51 @@
-import { createRef } from 'react';
+import {  useState, createRef } from 'react';
 import './ImageLinkForm.css';
 
 const ImageLinkForm = ({ inputImageUrl }) => {
+    const [ isError, setError ] = useState(false);
+
     const imageUrlInput = createRef();
 
-    const handleFormSubmit = (event) => {
+    const imageLinkSubmit = (event) => {
         event.preventDefault();
-
-        if (!imageUrlInput.current.value) {
-            console.log('Process is stopped due to no image URL');
-            return;
-        }
 
         inputImageUrl(imageUrlInput.current.value);
         imageUrlInput.current.value = '';
     };
 
+    const checkImageUrlExist = () => {
+        if (!imageUrlInput.current.value) {
+            setError(true);
+
+            setTimeout(() => {
+                setError(false);
+            }, 5e3);
+        }
+    }
+
     return (
         <form
             className='image-link-form'
-            onSubmit={ handleFormSubmit }
+            onSubmit={ imageLinkSubmit }
         >
-            <p>This AI will detect faces on the uploaded images</p>
+            <label htmlFor='image-url'>
+                { isError
+                    ? 'Process is stopped due to no image URL'
+                    : 'This AI will detect faces on the uploaded images' }
+            </label>
+
             <div>
                 <input
                     type='search'
+                    id='image-url'
                     ref={ imageUrlInput }
+                    required
                 />
-                <button type='submit'>Detect</button>
+
+                <button
+                    type='submit'
+                    onClick={ checkImageUrlExist }
+                >Detect</button>
             </div>
         </form>
     );

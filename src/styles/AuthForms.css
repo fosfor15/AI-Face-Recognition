@@ -15,6 +15,12 @@
     margin: 10px 0 18px;
 }
 
+.sign-in-form p,
+.registration-form p {
+    font-size: 22px;
+    margin: 20px 0 30px;
+}
+
 .sign-in-form label,
 .registration-form label {
     display: block;

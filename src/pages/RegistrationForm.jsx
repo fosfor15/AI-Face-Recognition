@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import '../styles/AuthForms.css';
 
 
@@ -7,18 +8,20 @@ const RegistrationForm = () => {
     const [ isRegister, setRegister ] = useState(false);
     const navigate = useNavigate();
 
-    const register = () => {
+    const register = (event) => {
+        event.preventDefault();
+
         setRegister(true);
-
-        console.log('You are registered successfully');
-
         setTimeout(() => {
             navigate('/');
-        }, 2e3);
+        }, 3e3);
     };
 
     return (
-        <form className="registration-form">
+        <form
+            className="registration-form"
+            onSubmit={ register }
+        >
             <h2>Registration</h2>
 
             { isRegister
@@ -56,10 +59,7 @@ const RegistrationForm = () => {
                     />
                 </div>
 
-                <button
-                    type="submit"
-                    onClick={ register }
-                >Register</button>
+                <button type="submit">Register</button>
             </> }
         </form>
     );

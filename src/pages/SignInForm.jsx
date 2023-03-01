@@ -9,13 +9,18 @@ import '../styles/AuthForms.css';
 const SignInForm = () => {
     const { setAuth } = useContext(AuthContext);
 
-    const signIn = () => {
+    const signIn = (event) => {
+        event.preventDefault();
+        
         setAuth(true);
         localStorage.setItem('isAuth', 'true');
     };
 
     return (
-        <form className="sign-in-form">
+        <form
+            className="sign-in-form"
+            onSubmit={ signIn }
+        >
             <h2>Sign in</h2>
 
             <div className="form-control-container">
@@ -34,11 +39,7 @@ const SignInForm = () => {
                 />
             </div>
 
-            <button
-                type="submit"
-                onClick={ signIn }
-            >Sign in</button>
-
+            <button type="submit">Sign in</button>
             <Link to="/registration">Register</Link>
         </form>
     );
