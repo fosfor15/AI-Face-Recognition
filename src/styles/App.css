@@ -12,11 +12,43 @@
 
 h1 {
     font-size: 3.2em;
-    line-height: 1.1;
+    margin: 10px 0 40px;
+}
+
+h2 {
+    font-size: 2.5em;
 }
 
 a {
+    font-size: 1em;
     color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+form {
+    margin: 80px auto 0;
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 5px 5px 20px -8px black;
+}
+
+input {
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 1px solid #ffffff80;
+    border-radius: 8px;
+    outline: none;
+    color: inherit;
+    font-size: 21px;
+    transition: .2s;
+}
+
+input:focus {
+    background-color: #00000033;
 }
 
 button {
@@ -29,5 +61,17 @@ button {
     background-color: #ffffffb3;
     color: #1a0a5a;
     cursor: pointer;
-    transition: border-color 0.25s;
+    transition: .2s;
+}
+
+button:hover {
+    background-color: #ffffffe9;
+}
+
+button:focus {
+    outline: none;
+}
+
+button:active {
+    background-color: #acadff;
 }
