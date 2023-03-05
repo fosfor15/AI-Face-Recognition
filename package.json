@@ -1,0 +1,17 @@
+{
+    "name": "ai-face-recognition-backend",
+    "version": "1.0.0",
+    "description": "",
+    "private": true,
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "nodemon ./server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.21"
+    }
+}
