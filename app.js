@@ -1,4 +1,5 @@
 import express from 'express';
+import dbService from './database/db-service.js';
 
 const app = express();
 const port = 3000;
@@ -7,18 +8,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('We get your GET request');
+    res.send(dbService.getUsers());
 });
 
 app.post('/signin', (req, res) => {
-    res.send('We get your POST request');
-    console.log(req.body);
+    res.status(200).send(
+        dbService.getUser(req.body)
+    );
 });
 
 app.post('/register', (req, res) => {
-    res.send('We get your POST request');
-    console.log(req.body);
-    res.send('Registration is done');
+    dbService.addUser(req.body);
+    res.status(200).send(
+        dbService.getUser(req.body)
+    );
 });
 
 app.listen(port, () => {
