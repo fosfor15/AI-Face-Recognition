@@ -34,6 +34,16 @@ app.get('/profile/:id', (req, res) => {
     }
 });
 
+app.post('/entries', (req, res) => {
+    const user = dbService.increaseUserEntries(req.body.id);
+
+    if (!user) {
+        res.status(404).send('We don\'t have user with specified ID');
+    } else {
+        res.status(200).send(user);
+    }
+})
+
 app.listen(port, () => {
     console.log('The app is running on port 3000');
 });

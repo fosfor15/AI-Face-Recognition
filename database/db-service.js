@@ -9,6 +9,16 @@ const dbService = {
         );
     },
 
+    updateDb(updatedUsers) {
+        fs.writeFileSync(
+            './database/database.json',
+            JSON.stringify({ users: updatedUsers }, null, 4),
+            'utf8'
+        );
+        
+        this.updateLocalUsers();
+    },
+
     updateLocalUsers() {
         return this._users = this.readDb().users.slice();
     },
@@ -48,10 +58,21 @@ const dbService = {
 
         const updatedUsers = this.getUsers().slice();
         updatedUsers.push(this.createUser(name, email, password));
-        const updatedDb = JSON.stringify({ users: updatedUsers }, null, 4);
+        this.updateDb(updatedUsers);
+    },
 
-        fs.writeFileSync('./database/database.json', updatedDb, 'utf8');
-        this.updateLocalUsers();
+    increaseUserEntries(id) {
+        const user = this.getUserById(id);
+
+        if (!user) {
+            console.log('We don\'t have user with specified ID');
+            return;
+        }
+
+        user.entries++;
+        this.updateDb(this.getUsers());
+        
+        return user;
     }
 };
 
