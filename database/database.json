@@ -1,14 +1,28 @@
 {
     "users": [
         {
+            "id": 1,
             "name": "Superman",
             "email": "superman@mail.com",
-            "password": "qwerty"
+            "password": "qwerty",
+            "entries": 0,
+            "registrationDate": "2023-03-07T16:47:09.139Z"
         },
         {
+            "id": 2,
             "name": "Nightman",
             "email": "nightman@mail.com",
-            "password": "night123"
+            "password": "night123",
+            "entries": 0,
+            "registrationDate": "2023-03-07T16:47:25.720Z"
+        },
+        {
+            "id": 3,
+            "name": "Spiderman",
+            "email": "spiderman@mail.com",
+            "password": "spider",
+            "entries": 0,
+            "registrationDate": "2023-03-07T16:53:42.812Z"
         }
     ]
 }

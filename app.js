@@ -13,14 +13,14 @@ app.get('/', (req, res) => {
 
 app.post('/signin', (req, res) => {
     res.status(200).send(
-        dbService.getUser(req.body)
+        dbService.getUserByEmail(req.body.email)
     );
 });
 
 app.post('/register', (req, res) => {
     dbService.addUser(req.body);
     res.status(200).send(
-        dbService.getUser(req.body)
+        dbService.getUserByEmail(req.body.email)
     );
 });
 
