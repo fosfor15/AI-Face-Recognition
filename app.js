@@ -8,12 +8,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send(dbService.getUsers());
+    res.send(dbService.users);
 });
 
 app.post('/signin', (req, res) => {
     res.status(200).send(
-        dbService.getUserByEmail(req.body.email)
+        dbService.checkUserEmailPassword(req.body)
     );
 });
 

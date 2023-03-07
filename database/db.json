@@ -1,0 +1,42 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Superman",
+            "email": "superman@mail.com",
+            "entries": 3,
+            "registrationDate": "2023-03-07T20:55:57.760Z"
+        },
+        {
+            "id": 2,
+            "name": "Nightman",
+            "email": "nightman@mail.com",
+            "entries": 1,
+            "registrationDate": "2023-03-07T20:56:34.587Z"
+        },
+        {
+            "id": 3,
+            "name": "Spiderman",
+            "email": "spiderman@mail.com",
+            "entries": 0,
+            "registrationDate": "2023-03-07T20:57:08.584Z"
+        }
+    ],
+    "logins": [
+        {
+            "id": 1,
+            "hash": "$2b$10$90q2JdFiC9zf6XMH1F9rO.t1ZcOkUT7CQe8THDe80VqeXBhiA8wJK",
+            "email": "superman@mail.com"
+        },
+        {
+            "id": 2,
+            "hash": "$2b$10$spv7Jya2lAEPIzumCqVyIujg3yj69n.h/W8RFOgvLYAFXo1F/ThLy",
+            "email": "nightman@mail.com"
+        },
+        {
+            "id": 3,
+            "hash": "$2b$10$Sx1ZfCAwJpTkix8mWyfZ9eu1rDt6hgV6CrGdNIgimguQR/gA4wiOC",
+            "email": "spiderman@mail.com"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "users": [
+        {
+            "name": "Superman",
+            "email": "superman@mail.com",
+            "password": "qwerty"
+        },
+        {
+            "name": "Nightman",
+            "email": "nightman@mail.com",
+            "password": "night123"
+        },
+        {
+            "name": "Spiderman",
+            "email": "spiderman@mail.com",
+            "password": "spider"
+        }
+    ]
+}
