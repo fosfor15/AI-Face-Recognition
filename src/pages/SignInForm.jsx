@@ -65,6 +65,7 @@ const SignInForm = () => {
                     id="email"
                     value={ email }
                     onChange={ event => setEmail(event.target.value) }
+                    required
                 />
             </div>
 
@@ -75,6 +76,7 @@ const SignInForm = () => {
                     id="password"
                     value={ password }
                     onChange={ event => setPassword(event.target.value) }
+                    required
                 />
             </div>
 
