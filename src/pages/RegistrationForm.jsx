@@ -1,20 +1,60 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import axiosInstance from '../network/axios-instance';
+
 import '../styles/AuthForms.css';
 
 
 const RegistrationForm = () => {
-    const [ isRegister, setRegister ] = useState(false);
     const navigate = useNavigate();
+
+    const [ email, setEmail ] = useState('');
+    const [ name, setName ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ repeatedPassword, setRepeatedPassword ] = useState('');
+    const [ isPasswordError, setPasswordError ] = useState(false);
+    const [ isRegister, setRegister ] = useState(false);
 
     const register = (event) => {
         event.preventDefault();
 
-        setRegister(true);
-        setTimeout(() => {
-            navigate('/');
-        }, 3e3);
+        if (password != repeatedPassword) {
+            setPasswordError(true);
+            setPassword('');
+            setRepeatedPassword('');
+
+            setTimeout(() => {
+                setPasswordError(false);
+            }, 3e3);
+
+            return;
+        }
+
+        const userCredentials = {
+            name,
+            email,
+            password
+        };
+
+        axiosInstance.post('/register', userCredentials)
+            .then(response => {
+                const { user } = response.data;
+
+                if (user) {
+                    setRegister(true);
+                    setName('');
+                    setEmail('');
+                    setPassword('');
+
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 3e3);
+                }
+            })
+            .catch(error => {
+                console.log('error :>> ', error);
+            });
     };
 
     return (
@@ -32,6 +72,9 @@ const RegistrationForm = () => {
                     <input
                         type="text"
                         id="name"
+                        value={ name }
+                        onChange={ event => setName(event.target.value) }
+                        required
                     />
                 </div>
 
@@ -40,14 +83,28 @@ const RegistrationForm = () => {
                     <input
                         type="email"
                         id="email"
+                        value={ email }
+                        onChange={ event => setEmail(event.target.value) }
+                        required
                     />
                 </div>
+
+                { isPasswordError
+                && <h3>
+                    Password mismatch<br />
+                    Please enter your password again
+                </h3> }
 
                 <div className="form-control-container">
                     <label htmlFor="password">Password</label>
                     <input
                         type="password"
                         id="password"
+                        value={ password }
+                        onChange={
+                            event => setPassword(event.target.value)
+                        }
+                        required
                     />
                 </div>
 
@@ -56,6 +113,11 @@ const RegistrationForm = () => {
                     <input
                         type="password"
                         id="repeated-password"
+                        value={ repeatedPassword }
+                        onChange={
+                            event => setRepeatedPassword(event.target.value)
+                        }
+                        required
                     />
                 </div>
 
