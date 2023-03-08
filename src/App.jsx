@@ -17,10 +17,12 @@ function App() {
     }, []);
 
     const [ isAuth, setAuth ] = useState(false);
+    const [ user, setUser ] = useState(null);
 
     useEffect(() => {
         if (localStorage.getItem('isAuth')) {
             setAuth(true);
+            setUser( JSON.parse(localStorage.getItem('user')) );
         }
     }, []);
 
@@ -31,10 +33,12 @@ function App() {
                 options={ tsParticlesOptions }
                 init={ particlesInit }
             />
-            <AuthContext.Provider value={{ isAuth, setAuth }}>
+            <AuthContext.Provider
+                value={{ isAuth, setAuth, user, setUser }}
+            >
                 <Navigation />
                 <AppRouter />
-            </AuthContext.Provider>            
+            </AuthContext.Provider>
         </div>
     );
 }

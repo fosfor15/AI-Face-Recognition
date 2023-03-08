@@ -5,7 +5,7 @@ import './Logo.css';
 
 
 const Logo = () => {
-    const { isAuth, setAuth } = useContext(AuthContext);
+    const { isAuth, setAuth, setUser } = useContext(AuthContext);
 
     if (!isAuth) {
         return;
@@ -14,6 +14,9 @@ const Logo = () => {
     const signOut = () => {
         setAuth(false);
         localStorage.removeItem('isAuth');
+        
+        setUser(null);
+        localStorage.removeItem('user');
     };
 
     return (

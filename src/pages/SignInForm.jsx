@@ -9,7 +9,7 @@ import '../styles/AuthForms.css';
 
 
 const SignInForm = () => {
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth, setUser } = useContext(AuthContext);
 
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
@@ -30,6 +30,10 @@ const SignInForm = () => {
                 if (isAuth) {
                     setAuth(isAuth);
                     localStorage.setItem('isAuth', 'true');
+
+                    const { user } = response.data;
+                    setUser(user);
+                    localStorage.setItem('user', JSON.stringify(user));
                 } else {
                     setAuthError(true);
                     setEmail('');
