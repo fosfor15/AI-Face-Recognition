@@ -25,9 +25,9 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     dbService.addUser(req.body);
-    res.status(200).send(
-        dbService.getUserByEmail(req.body.email)
-    );
+    res.status(200).send({
+        user: dbService.getUserByEmail(req.body.email)
+    });
 });
 
 app.get('/profile/:id', (req, res) => {
