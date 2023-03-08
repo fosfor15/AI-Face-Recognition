@@ -2,19 +2,25 @@ import express from 'express';
 import dbService from './database/db-service.js';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+});
 
 app.get('/', (req, res) => {
     res.send(dbService.users);
 });
 
 app.post('/signin', (req, res) => {
-    res.status(200).send(
-        dbService.checkUserEmailPassword(req.body)
-    );
+    res.status(200).send({
+        isAuth: dbService.checkUserEmailPassword(req.body)
+    });
 });
 
 app.post('/register', (req, res) => {
@@ -45,5 +51,5 @@ app.post('/entries', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log('The app is running on port 3000');
+    console.log(`The app is running on port ${port}`);
 });
