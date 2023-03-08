@@ -1,7 +1,9 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 
 import { Link } from 'react-router-dom';
+
+import axiosInstance from '../network/axios-instance';
 
 import '../styles/AuthForms.css';
 
@@ -9,11 +11,38 @@ import '../styles/AuthForms.css';
 const SignInForm = () => {
     const { setAuth } = useContext(AuthContext);
 
-    const signIn = (event) => {
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ isAuthError, setAuthError ] = useState(false);
+
+    const signIn = async (event) => {
         event.preventDefault();
-        
-        setAuth(true);
-        localStorage.setItem('isAuth', 'true');
+
+        const userCredentials = {
+            email,
+            password
+        };
+
+        axiosInstance.post('/signin', userCredentials)
+            .then(response => {
+                const { isAuth } = response.data;
+
+                if (isAuth) {
+                    setAuth(isAuth);
+                    localStorage.setItem('isAuth', 'true');
+                } else {
+                    setAuthError(true);
+                    setEmail('');
+                    setPassword('');
+
+                    setTimeout(() => {
+                        setAuthError(false);
+                    }, 3e3);
+                }
+            })
+            .catch(error => {
+                console.log('error :>> ', error);
+            });
     };
 
     return (
@@ -23,11 +52,19 @@ const SignInForm = () => {
         >
             <h2>Sign in</h2>
 
+            { isAuthError
+            && <h3>
+                The Email or Password is incorrect<br />
+                Please try again
+            </h3> }
+
             <div className="form-control-container">
                 <label htmlFor="email">Email</label>
                 <input
                     type="email"
                     id="email"
+                    value={ email }
+                    onChange={ event => setEmail(event.target.value) }
                 />
             </div>
 
@@ -36,6 +73,8 @@ const SignInForm = () => {
                 <input
                     type="password"
                     id="password"
+                    value={ password }
+                    onChange={ event => setPassword(event.target.value) }
                 />
             </div>
 
