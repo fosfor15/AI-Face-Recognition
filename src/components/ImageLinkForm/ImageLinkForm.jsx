@@ -1,7 +1,7 @@
 import {  useState, createRef } from 'react';
 import './ImageLinkForm.css';
 
-const ImageLinkForm = ({ inputImageUrl }) => {
+const ImageLinkForm = ({ submitImageUrl }) => {
     const [ isError, setError ] = useState(false);
 
     const imageUrlInput = createRef();
@@ -9,7 +9,7 @@ const ImageLinkForm = ({ inputImageUrl }) => {
     const imageLinkSubmit = (event) => {
         event.preventDefault();
 
-        inputImageUrl(imageUrlInput.current.value);
+        submitImageUrl(imageUrlInput.current.value);
         imageUrlInput.current.value = '';
     };
 
