@@ -111,7 +111,7 @@ const dbService = {
         user.entries++;
         this.writeDb({ users: this.users });
 
-        return user;
+        return user.entries;
     },
 
     
