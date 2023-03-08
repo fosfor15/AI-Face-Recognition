@@ -18,9 +18,14 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
-    res.status(200).send({
-        isAuth: dbService.checkUserEmailPassword(req.body)
-    });
+    if (dbService.checkUserEmailPassword(req.body)) {
+        res.status(200).send({
+            isAuth: true,
+            user: dbService.getUserByEmail(req.body.email)
+        });
+    } else {
+        res.status(200).send({ isAuth: false });
+    }
 });
 
 app.post('/register', (req, res) => {
