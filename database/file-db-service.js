@@ -1,7 +1,7 @@
 import fs from 'fs';
 import bcrypt from 'bcrypt';
 
-const dbService = {
+const fileDbService = {
 
     // Full Database
 
@@ -144,4 +144,4 @@ const dbService = {
 
 };
 
-export default dbService;
+export default fileDbService;

@@ -1,4 +1,5 @@
 import express from 'express';
+import fileDbService from './database/file-db-service.js';
 import dbService from './database/db-service.js';
 
 
@@ -22,11 +23,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-    res.send(dbService.users);
+    res.send(fileDbService.users);
 });
 
 app.get('/profile/:id', (req, res) => {
-    const user = dbService.getUserById(req.params.id);
+    const user = fileDbService.getUserById(req.params.id);
 
     if (!user) {
         res.status(404).send('We don\'t have user with specified ID');
@@ -36,10 +37,10 @@ app.get('/profile/:id', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
-    if (dbService.checkUserEmailPassword(req.body)) {
+    if (fileDbService.checkUserEmailPassword(req.body)) {
         res.status(200).send({
             isAuth: true,
-            user: dbService.getUserByEmail(req.body.email)
+            user: fileDbService.getUserByEmail(req.body.email)
         });
     } else {
         res.status(200).send({ isAuth: false });
@@ -47,15 +48,15 @@ app.post('/signin', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    dbService.addUser(req.body);
+    fileDbService.addUser(req.body);
     res.status(200).send({
-        user: dbService.getUserByEmail(req.body.email)
+        user: fileDbService.getUserByEmail(req.body.email)
     });
 });
 
 app.put('/entries', (req, res) => {
     console.log('req.body :>> ', req.body);
-    const userUpdatedEntries = dbService.increaseUserEntries(req.body.id);
+    const userUpdatedEntries = fileDbService.increaseUserEntries(req.body.id);
 
     if (!userUpdatedEntries) {
         res.status(404).send('We don\'t have user with specified ID');
