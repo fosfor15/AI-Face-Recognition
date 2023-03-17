@@ -10,8 +10,7 @@ router.get('/', (req, res) => {
 
 router.get('/users', dbService.getUsers);
 router.get('/user/:id', dbService.getUser);
-
-router.get('/user/:id', dbService.getUser);
+router.put('/entries', dbService.incrementEntries);
 
 
 export default router;

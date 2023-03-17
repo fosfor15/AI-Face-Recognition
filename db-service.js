@@ -23,7 +23,7 @@ const dbService = {
     getUser(req, res) {
         const { id } = req.params;
 
-        pool.query('SELECT * FROM users WHERE id = $1', [ id ])
+        pool.query(`SELECT * FROM users WHERE id = ${id}`)
             .then(dbRes => {
                 const user = dbRes.rows[0];
 
@@ -35,8 +35,45 @@ const dbService = {
                     res.status(200).send(user);
                 }
             })
-            .catch(err => console.log(err));        
+            .catch(err => console.log(err));
+    },
+
+    incrementEntries(req, res) {
+        const { id } = req.body;
+
+        pool.query(
+                `UPDATE users SET entries = entries + 1 WHERE id = ${id};
+                SELECT entries FROM users WHERE id = ${id};`
+            ).then(dbRes => {
+                const entries = dbRes[1].rows[0]?.entries;
+
+                if (!entries) {
+                    res.status(404).send({
+                        description: 'We don\'t have user with specified ID'
+                    });
+                } else {
+                    res.status(200).send({ entries });
+                }
+            })
+            .catch(err => console.log(err));
     }
+
+    /* registerUser(req, res) {
+        res.status(200).send({
+            user: fileDbService.getUserByEmail(req.body.email)
+        });
+    },
+
+    signinUser(req, res) {
+        if (fileDbService.checkUserEmailPassword(req.body)) {
+            res.status(200).send({
+                isAuth: true,
+                user: fileDbService.getUserByEmail(req.body.email)
+            });
+        } else {
+            res.status(200).send({ isAuth: false });
+        }
+    } */
 };
 
 
