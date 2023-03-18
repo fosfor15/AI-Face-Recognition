@@ -10,11 +10,16 @@ const pool = new pg.Pool({
     password: '12345'
 });
 
+
 const saltRounds = 10;
 
 const hashPassword = (password) => {
     const salt = bcrypt.genSaltSync(saltRounds);
     return bcrypt.hashSync(password, salt);
+};
+
+const checkPassword = (password, hash) => {
+    return bcrypt.compareSync(password, hash);
 };
 
 
@@ -100,6 +105,35 @@ const dbService = {
             })
             .finally(() => {
                 client.release();
+            });
+    },
+
+    signinUser(req, res) {
+        const { email, password } = req.body;
+
+        pool.query(`SELECT email, hash FROM logins WHERE email = '${email}'`)
+            .then(dbRes => {
+                const { hash } = dbRes.rows[0];
+                const isPasswordValid = checkPassword(password, hash);
+
+                if (isPasswordValid) {
+                    pool.query(`SELECT * FROM users WHERE email = '${email}'`)
+                        .then(dbRes => {
+                            const user = dbRes.rows[0];
+                            res.status(200).send({
+                                isAuth: true,
+                                user
+                            });
+                        });
+                } else {
+                    res.status(200).send({
+                        isAuth: false,
+                        description: 'Wrong email or password'
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
             });
     }
 };
