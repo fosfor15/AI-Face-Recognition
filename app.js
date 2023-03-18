@@ -18,6 +18,10 @@ app.use((req, res, next) => {
 app.use(router);
 
 
+app.get('/', (req, res) => {
+    res.send('We got your GET request');
+});
+
 app.listen(port, () => {
     console.log(`The app is running on port ${port}`);
 });
