@@ -29,7 +29,11 @@ const dbService = {
             .then(dbRes =>
                 res.status(200).send(dbRes.rows)
             )
-            .catch(err => console.log(err));
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
     },
 
     getUser(req, res) {
@@ -41,13 +45,17 @@ const dbService = {
 
                 if (!user) {
                     res.status(404).send({
-                        description: 'We don\'t have user with specified ID'
+                        description: 'Unable to get user'
                     });
                 } else {
                     res.status(200).send(user);
                 }
             })
-            .catch(err => console.log(err));
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
     },
 
     incrementEntries(req, res) {
@@ -59,13 +67,17 @@ const dbService = {
 
                 if (!entries) {
                     res.status(404).send({
-                        description: 'We don\'t have user with specified ID'
+                        description: 'Unable to get user'
                     });
                 } else {
                     res.status(200).send({ entries });
                 }
             })
-            .catch(err => console.log(err));
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
     },
 
     registerUser(req, res) {
@@ -96,11 +108,10 @@ const dbService = {
                 const regUser = dbRes.rows[0];
                 res.status(200).send(regUser);
             })
-            .catch(err => {
+            .catch(error => {
                 client.query('ROLLBACK');
-                console.log(err);
                 res.status(404).send({
-                    description: 'Unable to register new user'
+                    description: `Unable to register new user: ${error.message}`
                 });
             })
             .finally(() => {
@@ -132,8 +143,10 @@ const dbService = {
                     });
                 }
             })
-            .catch(err => {
-                console.log(err);
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
             });
     }
 };
