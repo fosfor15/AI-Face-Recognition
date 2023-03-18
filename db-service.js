@@ -25,7 +25,7 @@ const checkPassword = (password, hash) => {
 
 const dbService = {
     getUsers(req, res) {
-        pool.query('SELECT * FROM users')
+        pool.query('SELECT * FROM users ORDER BY id ASC')
             .then(dbRes =>
                 res.status(200).send(dbRes.rows)
             )
