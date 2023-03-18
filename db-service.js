@@ -10,6 +10,13 @@ const pool = new pg.Pool({
     password: '12345'
 });
 
+const saltRounds = 10;
+
+const hashPassword = (password) => {
+    const salt = bcrypt.genSaltSync(saltRounds);
+    return bcrypt.hashSync(password, salt);
+};
+
 
 const dbService = {
     getUsers(req, res) {
@@ -54,24 +61,47 @@ const dbService = {
                 }
             })
             .catch(err => console.log(err));
-    }
-
-    /* registerUser(req, res) {
-        res.status(200).send({
-            user: fileDbService.getUserByEmail(req.body.email)
-        });
     },
 
-    signinUser(req, res) {
-        if (fileDbService.checkUserEmailPassword(req.body)) {
-            res.status(200).send({
-                isAuth: true,
-                user: fileDbService.getUserByEmail(req.body.email)
+    registerUser(req, res) {
+        const { name, email, password } = req.body;
+        const hash = hashPassword(password);
+
+        let client;
+        
+        pool.connect()
+            .then(_client => {
+                client = _client;
+                return client.query('BEGIN');
+            })
+            .then(() => {
+                return client.query(`INSERT INTO users (name, email) VALUES ('${name}', '${email}') RETURNING email`);
+            })
+            .then(dbRes => {
+                const { email: regEmail } = dbRes.rows[0];
+                return client.query(`INSERT INTO logins (hash, email) VALUES ('${hash}', '${regEmail}')`);
+            })
+            .then(() => {
+                return client.query('COMMIT');
+            })
+            .then(() => {
+                return client.query(`SELECT * FROM users WHERE email = '${email}'`);
+            })
+            .then(dbRes => {
+                const regUser = dbRes.rows[0];
+                res.status(200).send(regUser);
+            })
+            .catch(err => {
+                client.query('ROLLBACK');
+                console.log(err);
+                res.status(404).send({
+                    description: 'Unable to register new user'
+                });
+            })
+            .finally(() => {
+                client.release();
             });
-        } else {
-            res.status(200).send({ isAuth: false });
-        }
-    } */
+    }
 };
 
 
