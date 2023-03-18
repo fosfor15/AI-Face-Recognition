@@ -39,7 +39,7 @@ const RegistrationForm = () => {
 
         axiosInstance.post('/register', userCredentials)
             .then(response => {
-                const { user } = response.data;
+                const user = response.data;
 
                 if (user) {
                     setRegister(true);
