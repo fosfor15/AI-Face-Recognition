@@ -15,7 +15,7 @@ const SignInForm = () => {
     const [ password, setPassword ] = useState('');
     const [ isAuthError, setAuthError ] = useState(false);
 
-    const signIn = async (event) => {
+    const signInUser = async (event) => {
         event.preventDefault();
 
         const userCredentials = {
@@ -52,7 +52,7 @@ const SignInForm = () => {
     return (
         <form
             className="sign-in-form"
-            onSubmit={ signIn }
+            onSubmit={ signInUser }
         >
             <h2>Sign in</h2>
 

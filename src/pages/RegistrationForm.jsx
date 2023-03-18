@@ -16,7 +16,7 @@ const RegistrationForm = () => {
     const [ isPasswordError, setPasswordError ] = useState(false);
     const [ isRegister, setRegister ] = useState(false);
 
-    const register = (event) => {
+    const registerUser = (event) => {
         event.preventDefault();
 
         if (password != repeatedPassword) {
@@ -60,7 +60,7 @@ const RegistrationForm = () => {
     return (
         <form
             className="registration-form"
-            onSubmit={ register }
+            onSubmit={ registerUser }
         >
             <h2>Registration</h2>
 
