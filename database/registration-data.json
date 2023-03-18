@@ -14,6 +14,21 @@
             "name": "Spiderman",
             "email": "spiderman@mail.com",
             "password": "spider"
+        },
+        {
+            "name": "Kitty",
+            "email": "kitty@koshka.com",
+            "password": "koshka"
+        },
+        {
+            "name": "Dino",
+            "email": "dino@jurastic-park.com",
+            "password": "dinosaur"
+        },
+        {
+            "name": "Flaffy",
+            "email": "flaffy@mail.com",
+            "password": "flaff"
         }
     ]
 }
