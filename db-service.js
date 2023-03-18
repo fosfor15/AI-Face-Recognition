@@ -41,11 +41,9 @@ const dbService = {
     incrementEntries(req, res) {
         const { id } = req.body;
 
-        pool.query(
-                `UPDATE users SET entries = entries + 1 WHERE id = ${id};
-                SELECT entries FROM users WHERE id = ${id};`
-            ).then(dbRes => {
-                const entries = dbRes[1].rows[0]?.entries;
+        pool.query(`UPDATE users SET entries = entries + 1 WHERE id = ${id} RETURNING entries`)
+            .then(dbRes => {
+                const entries = dbRes.rows[0]?.entries;
 
                 if (!entries) {
                     res.status(404).send({
