@@ -67,8 +67,6 @@ const ImageRecognition = () => {
             config
         )
         .then(response => {
-            console.log('response :>> ', response);
-
             const rawBoundingBox = response.data.outputs[0].data.regions[0].region_info.bounding_box;
             const boundingBox = computeBoundingBox(rawBoundingBox);
 
