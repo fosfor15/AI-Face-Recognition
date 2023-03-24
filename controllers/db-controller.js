@@ -23,7 +23,7 @@ const checkPassword = (password, hash) => {
 };
 
 
-const dbService = {
+const dbController = {
     getUsers(req, res) {
         pool.query('SELECT * FROM users ORDER BY id ASC')
             .then(dbRes =>
@@ -152,4 +152,4 @@ const dbService = {
 };
 
 
-export default dbService;
+export default dbController;

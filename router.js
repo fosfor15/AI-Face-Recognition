@@ -1,14 +1,12 @@
 import { Router } from 'express';
-import dbService from './db-service.js';
+import dbController from './controllers/db-controller.js';
 
 const router = new Router();
 
-
-router.get('/users', dbService.getUsers);
-router.get('/user/:id', dbService.getUser);
-router.post('/register', dbService.registerUser);
-router.post('/signin', dbService.signinUser);
-router.put('/entries', dbService.incrementEntries);
-
+router.get('/users', dbController.getUsers);
+router.get('/user/:id', dbController.getUser);
+router.post('/register', dbController.registerUser);
+router.post('/signin', dbController.signinUser);
+router.put('/entries', dbController.incrementEntries);
 
 export default router;
