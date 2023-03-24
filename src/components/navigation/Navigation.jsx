@@ -1,4 +1,4 @@
-import Logo from '../logo/Logo';
+import Logo from '../Logo/Logo';
 import './Navigation.css';
 
 const Navigation = () => {
