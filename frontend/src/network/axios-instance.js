@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3001',
+    baseURL: 'https://ai-face-recognition-backend.onrender.com',
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
 });
 
