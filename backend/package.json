@@ -6,7 +6,8 @@
     "main": "app.js",
     "type": "module",
     "scripts": {
-        "start": "nodemon ./app.js"
+        "start": "node ./app.js",
+        "serve": "nodemon ./app.js"
     },
     "dependencies": {
         "bcrypt": "^5.1.0",

@@ -1,8 +1,6 @@
 import https from 'https';
 
-// ai-face-recognition-app
-const PAT = '990ce28ccc54416c9e15b0be0d4a978a';
-
+const PAT = process.env.CLARIFAI_PAT;
 const USER_ID = 'clarifai';
 const APP_ID = 'main';
 const MODEL_ID = 'face-detection';

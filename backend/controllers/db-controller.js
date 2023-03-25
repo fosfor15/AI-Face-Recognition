@@ -3,15 +3,16 @@ import bcrypt from 'bcrypt';
 
 
 const pool = new pg.Pool({
-    database: 'ai-face-recognition',
-    host: 'localhost',
-    port: 5432,
-    user: 'ai-face-recognition-user',
-    password: '12345'
+    connectionString: process.env.DATABASE_URL,
+    host: process.env.DATABASE_HOSTNAME,
+    database: process.env.DATABASE_NAME,
+    port: process.env.DATABASE_PORT,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD
 });
 
 
-const saltRounds = 10;
+const saltRounds = process.env.SALT_ROUNDS;
 
 const hashPassword = (password) => {
     const salt = bcrypt.genSaltSync(saltRounds);
