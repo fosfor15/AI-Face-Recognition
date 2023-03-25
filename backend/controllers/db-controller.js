@@ -12,7 +12,7 @@ const pool = new pg.Pool({
 });
 
 
-const saltRounds = process.env.SALT_ROUNDS;
+const saltRounds = Number(process.env.SALT_ROUNDS);
 
 const hashPassword = (password) => {
     const salt = bcrypt.genSaltSync(saltRounds);
