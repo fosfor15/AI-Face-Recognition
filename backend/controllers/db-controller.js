@@ -19,7 +19,7 @@ const hashPassword = (password) => {
     return bcrypt.hashSync(password, salt);
 };
 
-const checkPassword = (password, hash) => {
+const checkPassword = (password, hash = '') => {
     return bcrypt.compareSync(password, hash);
 };
 
@@ -125,7 +125,7 @@ const dbController = {
 
         pool.query(`SELECT email, hash FROM logins WHERE email = '${email}'`)
             .then(dbRes => {
-                const { hash } = dbRes.rows[0];
+                const hash = dbRes.rows[0]?.hash;
                 const isPasswordValid = checkPassword(password, hash);
 
                 if (isPasswordValid) {
