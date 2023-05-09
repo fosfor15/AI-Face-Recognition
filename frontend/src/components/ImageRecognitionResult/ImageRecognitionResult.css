@@ -1,5 +1,7 @@
 
 .image-recognition-result {
+    position: relative;
+    z-index: 2;
     max-width: 800px;
     min-width: 380px;
     margin: 10px auto 0;
