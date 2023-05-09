@@ -10,6 +10,13 @@
     min-width: 380px;
 }
 
+@media screen and (max-width: 488px) {
+    .sign-in-form,
+    .registration-form {
+        min-width: 300px;
+    }
+}
+
 .sign-in-form h2,
 .registration-form h2 {
     margin: 10px 0 18px;

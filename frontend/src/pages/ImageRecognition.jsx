@@ -8,36 +8,41 @@ import ImageRecognitionResult from '../components/ImageRecognitionResult/ImageRe
 import axiosInstance from '../network/axios-instance';
 
 
-const computeBoundingBox = (rawBoundingBox) => {
-    const boundingBox = {};
+const convertBoundingBoxes = (boundingBoxes) => {
+    const convertedBoundingBoxes = boundingBoxes.map(boundingBox => {
+        const convertedBoundingBox = {};
 
-    for (let [ side, coord ] of Object.entries(rawBoundingBox)) {
-        if (side == 'right_col' || side == 'bottom_row') {
-            coord = 1 - coord;
+        for (let [ side, coord ] of Object.entries(boundingBox)) {
+            if (side == 'right' || side == 'bottom') {
+                coord = 1 - coord;
+            }
+
+            convertedBoundingBox[side] = (coord * 1e2).toFixed(2) + '%';
         }
 
-        boundingBox[ side.match(/(\w+)_/)[1] ] = (coord * 1e2).toFixed(2) + '%';
-    }
+        return convertedBoundingBox;
+    });
 
-    return boundingBox;
+    return convertedBoundingBoxes;
 };
 
 const ImageRecognition = () => {
     const { user, setUser } = useContext(AuthContext);
 
     const [ imageUrl, setImageUrl ] = useState('');
-    const [ boundingBox, setBoundingBox ] = useState(null);
+    const [ boundingBoxes, setBoundingBoxes ] = useState([]);
 
-    const submitImageUrl = (imageUrl) => {
-        setBoundingBox(null);
+    const submitImage = (imageUrl) => {
+        setImageUrl('');
+        setBoundingBoxes([]);
 
         axiosInstance.post('/image', { imageUrl })
             .then(response => {
-                const { rawBoundingBox } = response.data;
-                const boundingBox = computeBoundingBox(rawBoundingBox);
+                const { boundingBoxes: initialBoundingBoxes } = response.data;
+                const boundingBoxes = convertBoundingBoxes(initialBoundingBoxes);
 
                 setImageUrl(imageUrl);
-                setBoundingBox(boundingBox);
+                setBoundingBoxes(boundingBoxes);
 
                 setTimeout(() => {
                     document.getElementsByClassName('image-recognition-result')[0].scrollIntoView(true);
@@ -48,6 +53,7 @@ const ImageRecognition = () => {
             .then(response => {
                 const { entries } = response.data;
                 const updatedUser = { ...user, entries };
+
                 setUser(updatedUser);
                 localStorage.setItem('user', JSON.stringify(updatedUser));
             })
@@ -60,11 +66,11 @@ const ImageRecognition = () => {
         <>
             <Rank />
             <ImageLinkForm
-                submitImageUrl={ submitImageUrl }
+                submitImage={ submitImage }
             />
             <ImageRecognitionResult
                 imageUrl={ imageUrl }
-                boundingBox={ boundingBox }
+                boundingBoxes={ boundingBoxes }
             />
         </>
     );
