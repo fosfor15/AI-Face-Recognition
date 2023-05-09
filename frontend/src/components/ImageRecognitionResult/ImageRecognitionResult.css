@@ -12,6 +12,7 @@
 .image-recognition-result img {
     width: 100%;
     border-radius: 8px;
+    box-shadow: 5px 5px 20px -8px #000;
 }
 
 .relative-container {
