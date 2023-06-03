@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 
 const pool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL,
+    // connectionString: process.env.DATABASE_URL,
     host: process.env.DATABASE_HOSTNAME,
     database: process.env.DATABASE_NAME,
     port: process.env.DATABASE_PORT,

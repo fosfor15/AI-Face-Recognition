@@ -1,0 +1,39 @@
+
+name: ai-face-recognition-backend
+
+services:
+    server:
+        container_name: server
+        build: ./
+        command: npm start
+        working_dir: /usr/src/ai-face-recognition-backend
+        environment:
+            DATABASE_USER: 'ai-face-recognition-user'
+            DATABASE_PASSWORD: '12345'
+            DATABASE_NAME: 'ai-face-recognition-db'
+            DATABASE_HOSTNAME: 'postgres'
+            DATABASE_PORT: '5432'
+            SALT_ROUNDS: '10'
+        ports:
+            - '3001:3001'
+        networks:
+            - backend-tier
+        volumes:
+            - ./:/usr/src/ai-face-recognition-backend
+            - /usr/src/ai-face-recognition-backend/node_modules
+
+    postgres:
+        container_name: postgres
+        build: ./postgres/
+        environment:
+            POSTGRES_USER: 'ai-face-recognition-user'
+            POSTGRES_PASSWORD: '12345'
+            POSTGRES_DB: 'ai-face-recognition-db'
+            POSTGRES_HOST: 'postgres'
+        ports:
+            - '5432:5432'
+        networks:
+            - backend-tier
+
+networks:
+    backend-tier: {}
