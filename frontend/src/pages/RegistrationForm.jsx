@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import axiosInstance from '../network/axios-instance';
 
@@ -123,6 +123,7 @@ const RegistrationForm = () => {
 
                 <button type="submit">Register</button>
             </> }
+            <Link to="/">Sign In</Link>
         </form>
     );
 }
