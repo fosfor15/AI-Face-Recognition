@@ -1,0 +1,18 @@
+
+.dropdown-menu {
+    margin-top: 10px;
+    background-color: #ffffffb3;
+}
+
+.dropdown-item {
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 500;
+    color: #1a0a5a;
+
+    transition: .2s;
+}
+
+.dropdown-item:hover {
+    background-color: #ffffffe9;
+}
