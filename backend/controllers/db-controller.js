@@ -59,6 +59,41 @@ const dbController = {
             });
     },
 
+    updateUser(req, res) {
+        const { id } = req.params;
+        const { name, age, pet } = req.body;
+
+        let update = [];
+
+        if (name) {
+            update.push(`name = '${name}'`);
+        }
+
+        if (age) {
+            update.push(`age = '${age}'`);
+        }
+
+        if (pet) {
+            update.push(`pet = '${pet}'`);
+        }
+
+        pool.query(`UPDATE users SET ${ update.join(', ') } WHERE id = ${id} RETURNING *`)
+            .then(dbRes => {
+                const user = dbRes.rows[0];
+                console.log('updateUser >> user :>> ', user);
+
+                res.status(200).send({
+                    description: 'Profile was updated successfully',
+                    user
+                });
+            })
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
+    },
+
     incrementEntries(req, res) {
         const { id } = req.body;
 
