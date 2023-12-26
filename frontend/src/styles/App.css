@@ -29,28 +29,6 @@ a:hover {
     text-decoration: underline;
 }
 
-form {
-    margin: 80px auto 0;
-    padding: 22px;
-    border-radius: 16px;
-    box-shadow: 5px 5px 20px -8px black;
-}
-
-input {
-    padding: 8px 12px;
-    background-color: transparent;
-    border: 1px solid #ffffff80;
-    border-radius: 8px;
-    outline: none;
-    color: inherit;
-    font-size: 21px;
-    transition: .2s;
-}
-
-input:focus {
-    background-color: #00000033;
-}
-
 button {
     border-radius: 8px;
     border: 1px solid transparent;

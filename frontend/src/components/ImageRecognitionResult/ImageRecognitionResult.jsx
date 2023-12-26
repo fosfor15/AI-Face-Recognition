@@ -1,7 +1,6 @@
 import './ImageRecognitionResult.css';
 
 const ImageRecognitionResult = ({ imageUrl, boundingBoxes }) => {
-
     return (
         <div className="image-recognition-result">
             { imageUrl &&

@@ -1,0 +1,74 @@
+
+.modal-dialog {
+    margin-top: min(120px, 10vh);
+}
+
+.modal-content {
+    background-color: #ffffffdf;
+}
+
+.modal-header button:focus {
+    box-shadow: none;
+}
+
+.modal-body {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;;
+    font-size: 18px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+
+    width: fit-content;
+    margin: 0 auto 20px;
+}
+
+.profile-info .rank {
+    margin-top: 0;
+}
+
+.profile-form,
+.form-control {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-form {
+    width: 360px;
+    margin: 0 auto;
+    row-gap: 12px;
+}
+
+.form-control {
+    row-gap: 6px;
+    padding: 0;
+    background-color: unset;
+}
+
+.profile-form label {
+    margin-left: 11px;
+    font-size: 15px;
+}
+
+.profile-form input,
+.profile-form select {
+    padding: 4px 10px;
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+    background-color: #ffffffe9;
+}
+
+.profile-form input:focus,
+.profile-form select:focus {
+    outline: 2px solid #7575ca;
+}
+
+.profile-form select {
+    cursor: pointer;
+}
+
+.profile-form-button {
+    background-color: #ffffffe9;
+}

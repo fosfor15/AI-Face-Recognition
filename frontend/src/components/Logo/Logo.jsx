@@ -4,6 +4,7 @@ import Tilt from 'react-parallax-tilt';
 import AuthContext from '../../context/AuthContext';
 
 import LogoMenu from '../LogoMenu/LogoMenu';
+import ProfileModal from '../ProfileModal/ProfileModal';
 
 import './Logo.css';
 
@@ -12,6 +13,7 @@ const Logo = () => {
     const { isAuth, setAuth, setUser } = useContext(AuthContext);
 
     const [ isDropdownOpen, toggleDropdown ] = useState(false);
+    const [ isModalOpen, toggleModal ] = useState(false);
 
     if (!isAuth) {
         return;
@@ -22,7 +24,7 @@ const Logo = () => {
     };
 
     const toggleProfileModal = () => {
-        console.log('toggleProfileModal');
+        toggleModal(!isModalOpen);
     };
 
     const signOut = () => {
@@ -45,6 +47,11 @@ const Logo = () => {
                     <div className='logo'>👾</div>
                 </Tilt>
             </LogoMenu>
+
+            <ProfileModal
+                isModalOpen={ isModalOpen }
+                toggleProfileModal={ toggleProfileModal }
+            />
         </div>
     );
 }
