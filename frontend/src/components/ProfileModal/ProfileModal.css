@@ -25,6 +25,19 @@
     margin: 0 auto 20px;
 }
 
+.profile-info .name {
+    display: flex;
+    align-items: baseline;
+    column-gap: 7px;
+
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.profile-info .pet {
+    font-size: 36px;
+}
+
 .profile-info .rank {
     margin-top: 0;
 }

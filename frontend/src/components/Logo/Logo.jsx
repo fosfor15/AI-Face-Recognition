@@ -4,13 +4,13 @@ import Tilt from 'react-parallax-tilt';
 import AuthContext from '../../context/AuthContext';
 
 import LogoMenu from '../LogoMenu/LogoMenu';
-import ProfileModal from '../ProfileModal/ProfileModal';
+import ProfileModal, { petsMap } from '../ProfileModal/ProfileModal';
 
 import './Logo.css';
 
 
 const Logo = () => {
-    const { isAuth, setAuth, setUser } = useContext(AuthContext);
+    const { isAuth, setAuth, user, setUser } = useContext(AuthContext);
 
     const [ isDropdownOpen, toggleDropdown ] = useState(false);
     const [ isModalOpen, toggleModal ] = useState(false);
@@ -44,7 +44,7 @@ const Logo = () => {
                 signOut={ signOut }
             >
                 <Tilt>
-                    <div className='logo'>👾</div>
+                    <div className='logo'>{ petsMap.get(user.pet ?? 'kind-monster') }</div>
                 </Tilt>
             </LogoMenu>
 

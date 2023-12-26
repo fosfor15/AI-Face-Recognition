@@ -8,15 +8,70 @@ import {
     ModalFooter
 } from 'reactstrap';
 
+import axiosInstance from '../../network/axios-instance';
+
 import './ProfileModal.css';
 
 
+export const petsMap = new Map([
+    [ 'cat', '🐈' ], // 0x1F408
+    [ 'dog', '🐕' ], // 0x1F415
+    [ 'rabbit', '🐇' ], // 0x1F407
+    [ 'mouse', '🐁' ], // 0x1F401
+    [ 'parrot', '🐦' ], // 0x1F426
+    [ 'horse', '🐴' ], // 0x1F434
+    [ 'fish', '🐟' ], // 0x1F41F
+    [ 'pig', '🐖' ], // 0x1F416
+    [ 'snail', '🐌' ], // 0x1F40C
+    [ 'turtle', '🐢' ], // 0x1F422
+    [ 'snake', '🐍' ], // 0x1F40D
+    [ 'scorpion', '🦂' ], // 0x1F982
+    [ 'spider', '🕷' ], // 0x1F577
+    [ 'kind-monster', '👾' ] // 0x1F47E
+]);
+
+
 const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     
     const nameInput = createRef();
     const ageInput = createRef();
     const petSelect = createRef();
+    
+    const updateProfile = () => {        
+        let userUpdateData = {};
+
+        if (nameInput.current.value && nameInput.current.value != user.name) {
+            userUpdateData.name = nameInput.current.value;
+        }
+
+        if (ageInput.current.value && ageInput.current.value >= 0 &&
+            ageInput.current.value != user.age) {
+                userUpdateData.age = ageInput.current.value;
+        }
+
+        if (petSelect.current.value != 'null' && petSelect.current.value != user.pet) {
+            userUpdateData.pet = petSelect.current.value;
+        }
+
+        if (Object.entries(userUpdateData).length) {
+            
+            axiosInstance.post(`/user/${user.id}`, userUpdateData)
+                .then(response => {
+                    const { user, description } = response.data;
+
+                    if (user) {
+                        setUser(user);
+                        localStorage.setItem('user', JSON.stringify(user));
+                    }
+
+                    console.log('description :>> ', description);
+                })
+                .catch(error => {
+                    console.log('error :>> ', error);
+                });
+        }
+    };
 
     return (
         <Modal
@@ -30,14 +85,26 @@ const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
             <ModalBody>
                 <div className='profile-info'>
                     <div className='name'>
-                        { user.name } <span className='pet'>Kind monster</span>
+                        { user.name }
+                        { user.pet && <span className='pet'>{ petsMap.get(user.pet ?? 'kind-monster') }</span> }
                     </div>
-                    {/* <div className='age'>
-                        50 years
-                    </div>
+
+                    { user.age &&
+                        <div className='age'>
+                            Age of { user.age } years
+                        </div>
+                    }
+
                     <div className='joined'>
-                        Joined in { user.registrationdatetime }
-                    </div> */}
+                        Joined on {
+                            new Date(user.registrationdatetime).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })
+                        }
+                    </div> 
+
                     <div className='rank'>
                         The rank is #{ user.entries }
                     </div>
@@ -96,6 +163,7 @@ const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
             <ModalFooter>
                 <button
                     className='profile-form-button'
+                    onClick={ updateProfile }
                 >
                     Save
                 </button>
