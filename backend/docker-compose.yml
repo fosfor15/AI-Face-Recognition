@@ -15,6 +15,7 @@ services:
             DATABASE_PORT: '5432'
             SALT_ROUNDS: '10'
             JWT_SECRET: 'JWT_SECRET'
+            REDIS_URL: 'redis://redis:6379'
         ports:
             - '3001:3001'
         networks:
@@ -33,6 +34,14 @@ services:
             POSTGRES_HOST: 'postgres'
         ports:
             - '5432:5432'
+        networks:
+            - backend-tier
+
+    redis:
+        container_name: redis
+        image: redis
+        ports:
+            - '6379:6379'
         networks:
             - backend-tier
 

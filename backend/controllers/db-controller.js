@@ -1,6 +1,7 @@
 import pg from 'pg';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { createClient } from 'redis';
 
 
 const pool = new pg.Pool({
@@ -11,6 +12,16 @@ const pool = new pg.Pool({
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD
 });
+
+
+const redisClient = createClient({
+    url: process.env.REDIS_URL
+});
+
+redisClient.on('connect', () => console.log('Redis Client is connected'));
+redisClient.on('error', error => console.log('Redis Client Error', error));
+
+redisClient.connect();
 
 
 const saltRounds = Number(process.env.SALT_ROUNDS);
@@ -24,11 +35,20 @@ const checkPassword = (password, hash = '') => {
     return bcrypt.compareSync(password, hash);
 };
 
+
 const createToken = (email) => {
     const jwtPayload = { email };
     const jwtOptions = { expiresIn: 86_400 };
 
     return jwt.sign(jwtPayload, process.env.JWT_SECRET, jwtOptions);
+};
+
+const createSession = (userId, token) => {
+    return redisClient.set(token, userId);
+};
+
+const checkSession = (token) => {
+    return redisClient.get(token);
 };
 
 
@@ -172,18 +192,24 @@ const dbController = {
                 const isPasswordValid = checkPassword(password, hash);
 
                 if (isPasswordValid) {
-                    const token = createToken(email);
-
                     pool.query(`SELECT id FROM users WHERE email = '${email}'`)
                         .then(dbRes => {
                             const userId = dbRes.rows[0]?.id;
-                            console.log('signinUser >> userId :>> ', userId);
+                            const token = createToken(email);
 
-                            res.status(200).send({
-                                isAuth: true,
-                                userId,
-                                token
-                            });
+                            checkSession(token)
+                                .then(cachedUserId => {
+                                    if (cachedUserId == null) {
+                                        return createSession(userId, token);
+                                    }
+                                })
+                                .then(() => {
+                                    res.status(200).send({
+                                        isAuth: true,
+                                        userId,
+                                        token
+                                    });
+                                });
                         });
                 } else {
                     res.status(200).send({
