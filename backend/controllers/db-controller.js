@@ -1,5 +1,6 @@
 import pg from 'pg';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 
 const pool = new pg.Pool({
@@ -21,6 +22,13 @@ const hashPassword = (password) => {
 
 const checkPassword = (password, hash = '') => {
     return bcrypt.compareSync(password, hash);
+};
+
+const createToken = (email) => {
+    const jwtPayload = { email };
+    const jwtOptions = { expiresIn: 86_400 };
+
+    return jwt.sign(jwtPayload, process.env.JWT_SECRET, jwtOptions);
 };
 
 
@@ -158,18 +166,23 @@ const dbController = {
     signinUser(req, res) {
         const { email, password } = req.body;
 
-        pool.query(`SELECT email, hash FROM logins WHERE email = '${email}'`)
+        pool.query(`SELECT hash FROM logins WHERE email = '${email}'`)
             .then(dbRes => {
                 const hash = dbRes.rows[0]?.hash;
                 const isPasswordValid = checkPassword(password, hash);
 
                 if (isPasswordValid) {
-                    pool.query(`SELECT * FROM users WHERE email = '${email}'`)
+                    const token = createToken(email);
+
+                    pool.query(`SELECT id FROM users WHERE email = '${email}'`)
                         .then(dbRes => {
-                            const user = dbRes.rows[0];
+                            const userId = dbRes.rows[0]?.id;
+                            console.log('signinUser >> userId :>> ', userId);
+
                             res.status(200).send({
                                 isAuth: true,
-                                user
+                                userId,
+                                token
                             });
                         });
                 } else {
