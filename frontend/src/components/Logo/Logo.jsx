@@ -33,6 +33,8 @@ const Logo = () => {
         
         setUser(null);
         localStorage.removeItem('user');
+
+        localStorage.removeItem('token');
     };
 
     return (

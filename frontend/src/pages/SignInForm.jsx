@@ -28,12 +28,20 @@ const SignInForm = () => {
                 const { isAuth } = response.data;
 
                 if (isAuth) {
-                    setAuth(isAuth);
-                    localStorage.setItem('isAuth', 'true');
+                    const { userId, token } = response.data;
+                    console.log('signInUser >> userId :>> ', userId);
 
-                    const { user } = response.data;
-                    setUser(user);
-                    localStorage.setItem('user', JSON.stringify(user));
+                    axiosInstance.get(`/user/${userId}`)
+                        .then(({ data: user }) => {
+                            setUser(user);
+                            localStorage.setItem('user', JSON.stringify(user));
+                            
+                            localStorage.setItem('token', token);
+                            
+                            setAuth(isAuth);
+                            localStorage.setItem('isAuth', 'true');
+                        });
+
                 } else {
                     setAuthError(true);
                     setEmail('');
