@@ -22,7 +22,7 @@ const faceRecognitionController = {
         requestClarify(req.body.imageUrl)
             .then(boundingBoxes => {
                 res.status(200).send({ boundingBoxes });
-            })
+            });
     }
 };
 
