@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
 
 import { Link } from 'react-router-dom';
@@ -15,47 +15,73 @@ const SignInForm = () => {
     const [ password, setPassword ] = useState('');
     const [ isAuthError, setAuthError ] = useState(false);
 
+
+    const requestSignIn = async (payload) => {
+        const headers = payload.headers || null;
+        const body = payload.data || {};
+
+        try {
+            const response = await axiosInstance.post('/signin', body, { headers });
+            const { isAuth } = response.data;
+    
+            if (isAuth) {
+                const { userId, token } = response.data;
+                const { data: user } = await axiosInstance.get(`/user/${userId}`);
+                
+                setUser(user);
+                localStorage.setItem('token', token);
+                setAuth(isAuth);
+            }
+
+            return Promise.resolve({ isAuth });
+        } catch (error) {
+            console.log('error :>> ', error);
+        }
+    };
+
+
+    useEffect(() => {
+        (async () => {            
+            const token = localStorage.getItem('token');
+        
+            if (token) {
+                const { isAuth } = await requestSignIn({
+                    headers: {
+                        'Authorization': token
+                    }
+                });
+        
+                if (!isAuth) {
+                    setAuth(false);
+                    setUser(null);
+                    localStorage.removeItem('token');
+                }
+            }
+        })()
+    }, []);
+    
+
     const signInUser = async (event) => {
         event.preventDefault();
 
-        const userCredentials = {
-            email,
-            password
-        };
+        const { isAuth } = await requestSignIn({
+            data: {
+                email,
+                password
+            }
+        });
 
-        axiosInstance.post('/signin', userCredentials)
-            .then(response => {
-                const { isAuth } = response.data;
+        if (!isAuth) {
+            setAuthError(true);
+            setEmail('');
+            setPassword('');
 
-                if (isAuth) {
-                    const { userId, token } = response.data;
-                    console.log('signInUser >> userId :>> ', userId);
-
-                    axiosInstance.get(`/user/${userId}`)
-                        .then(({ data: user }) => {
-                            setUser(user);
-                            localStorage.setItem('user', JSON.stringify(user));
-                            
-                            localStorage.setItem('token', token);
-                            
-                            setAuth(isAuth);
-                            localStorage.setItem('isAuth', 'true');
-                        });
-
-                } else {
-                    setAuthError(true);
-                    setEmail('');
-                    setPassword('');
-
-                    setTimeout(() => {
-                        setAuthError(false);
-                    }, 3e3);
-                }
-            })
-            .catch(error => {
-                console.log('error :>> ', error);
-            });
+            setTimeout(() => {
+                setAuthError(false);
+            }, 10e3);
+        }
     };
+
 
     return (
         <form

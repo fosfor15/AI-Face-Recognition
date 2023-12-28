@@ -53,9 +53,7 @@ const ImageRecognition = () => {
             .then(response => {
                 const { entries } = response.data;
                 const updatedUser = { ...user, entries };
-
                 setUser(updatedUser);
-                localStorage.setItem('user', JSON.stringify(updatedUser));
             })
             .catch(error => {
                 console.log('error', error)

@@ -62,7 +62,6 @@ const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
 
                     if (user) {
                         setUser(user);
-                        localStorage.setItem('user', JSON.stringify(user));
                     }
 
                     console.log('description :>> ', description);

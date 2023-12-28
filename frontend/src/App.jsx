@@ -19,13 +19,6 @@ function App() {
     const [ isAuth, setAuth ] = useState(false);
     const [ user, setUser ] = useState(null);
 
-    useEffect(() => {
-        if (localStorage.getItem('isAuth')) {
-            setAuth(true);
-            setUser( JSON.parse(localStorage.getItem('user')) );
-        }
-    }, []);
-
     return (
         <div className="App">
             <Particles
