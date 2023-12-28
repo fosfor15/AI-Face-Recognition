@@ -18,8 +18,8 @@ const redisClient = createClient({
     url: process.env.REDIS_URL
 });
 
-redisClient.on('connect', () => console.log('Redis Client is connected'));
-redisClient.on('error', error => console.log('Redis Client Error', error));
+redisClient.on('connect', () => console.log('Redis client is connected'));
+redisClient.on('error', error => console.log('Redis client Error', error));
 
 redisClient.connect();
 
@@ -44,7 +44,11 @@ const createToken = (email) => {
 };
 
 const createSession = (userId, token) => {
-    return redisClient.set(token, userId);
+    const cacheOptions = {
+        EX: 3600
+    };
+
+    return redisClient.set(token, userId, cacheOptions);
 };
 
 const checkSession = (token) => {
@@ -53,75 +57,6 @@ const checkSession = (token) => {
 
 
 const dbController = {
-    getUsers(req, res) {
-        pool.query('SELECT * FROM users ORDER BY id ASC')
-            .then(dbRes =>
-                res.status(200).send(dbRes.rows)
-            )
-            .catch(error => {
-                res.status(500).send({
-                    description: error.message
-                });
-            });
-    },
-
-    getUser(req, res) {
-        const { id } = req.params;
-
-        pool.query(`SELECT * FROM users WHERE id = ${id}`)
-            .then(dbRes => {
-                const user = dbRes.rows[0];
-
-                if (!user) {
-                    res.status(404).send({
-                        description: 'Unable to get user'
-                    });
-                } else {
-                    res.status(200).send(user);
-                }
-            })
-            .catch(error => {
-                res.status(500).send({
-                    description: error.message
-                });
-            });
-    },
-
-    updateUser(req, res) {
-        const { id } = req.params;
-        const { name, age, pet } = req.body;
-
-        let update = [];
-
-        if (name) {
-            update.push(`name = '${name}'`);
-        }
-
-        if (age) {
-            update.push(`age = '${age}'`);
-        }
-
-        if (pet) {
-            update.push(`pet = '${pet}'`);
-        }
-
-        pool.query(`UPDATE users SET ${ update.join(', ') } WHERE id = ${id} RETURNING *`)
-            .then(dbRes => {
-                const user = dbRes.rows[0];
-                console.log('updateUser >> user :>> ', user);
-
-                res.status(200).send({
-                    description: 'Profile was updated successfully',
-                    user
-                });
-            })
-            .catch(error => {
-                res.status(500).send({
-                    description: error.message
-                });
-            });
-    },
-
     incrementEntries(req, res) {
         const { id } = req.body;
 
@@ -184,38 +119,92 @@ const dbController = {
     },
 
     signinUser(req, res) {
-        const { email, password } = req.body;
+        const { authorization: token } = req.headers;
 
-        pool.query(`SELECT hash FROM logins WHERE email = '${email}'`)
-            .then(dbRes => {
-                const hash = dbRes.rows[0]?.hash;
-                const isPasswordValid = checkPassword(password, hash);
-
-                if (isPasswordValid) {
-                    pool.query(`SELECT id FROM users WHERE email = '${email}'`)
-                        .then(dbRes => {
-                            const userId = dbRes.rows[0]?.id;
-                            const token = createToken(email);
-
-                            checkSession(token)
-                                .then(cachedUserId => {
-                                    if (cachedUserId == null) {
-                                        return createSession(userId, token);
-                                    }
-                                })
-                                .then(() => {
-                                    res.status(200).send({
-                                        isAuth: true,
-                                        userId,
-                                        token
-                                    });
-                                });
+        if (token) {
+            checkSession(token)
+                .then(userId => {                    
+                    if (userId) {
+                        res.status(200).send({
+                            isAuth: true,
+                            userId,
+                            token
                         });
-                } else {
-                    res.status(200).send({
-                        isAuth: false,
-                        description: 'Wrong email or password'
+                    } else {
+                        res.status(200).send({
+                            isAuth: false,
+                            description: 'Not authorized'
+                        });
+                    }
+                })
+                .catch(error => {
+                    res.status(500).send({
+                        description: error.message
                     });
+                });
+
+        } else {
+            const { email, password } = req.body;
+
+            pool.query(`SELECT hash FROM logins WHERE email = '${email}'`)
+                .then(dbRes => {
+                    const hash = dbRes.rows[0]?.hash;
+                    const isPasswordValid = checkPassword(password, hash);
+
+                    if (isPasswordValid) {
+                        pool.query(`SELECT id FROM users WHERE email = '${email}'`)
+                            .then(dbRes => {
+                                const userId = dbRes.rows[0]?.id;
+
+                                const token = createToken(email);
+                                createSession(userId, token);
+
+                                res.status(200).send({
+                                    isAuth: true,
+                                    userId,
+                                    token
+                                });
+                            });
+                    } else {
+                        res.status(200).send({
+                            isAuth: false,
+                            description: 'Wrong email or password'
+                        });
+                    }
+                })
+                .catch(error => {
+                    res.status(500).send({
+                        description: error.message
+                    });
+                });
+        }
+    },
+
+    getUsers(req, res) {
+        pool.query('SELECT * FROM users ORDER BY id ASC')
+            .then(dbRes =>
+                res.status(200).send(dbRes.rows)
+            )
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
+    },
+
+    getUser(req, res) {
+        const { id } = req.params;
+
+        pool.query(`SELECT * FROM users WHERE id = ${id}`)
+            .then(dbRes => {
+                const user = dbRes.rows[0];
+
+                if (!user) {
+                    res.status(404).send({
+                        description: 'Unable to get user'
+                    });
+                } else {
+                    res.status(200).send(user);
                 }
             })
             .catch(error => {
@@ -223,7 +212,40 @@ const dbController = {
                     description: error.message
                 });
             });
-    }
+    },
+
+    updateUser(req, res) {
+        const { id } = req.params;
+        const { name, age, pet } = req.body;
+
+        let update = [];
+
+        if (name) {
+            update.push(`name = '${name}'`);
+        }
+
+        if (age) {
+            update.push(`age = '${age}'`);
+        }
+
+        if (pet) {
+            update.push(`pet = '${pet}'`);
+        }
+
+        pool.query(`UPDATE users SET ${ update.join(', ') } WHERE id = ${id} RETURNING *`)
+            .then(dbRes => {
+                const user = dbRes.rows[0];
+                res.status(200).send({
+                    description: 'Profile was updated successfully',
+                    user
+                });
+            })
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
+    },
 };
 
 
