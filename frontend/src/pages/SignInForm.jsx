@@ -13,6 +13,8 @@ const SignInForm = () => {
 
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+
+    const [ isRepeatingSignIn, setRepeatingSignIn ] = useState(true);
     const [ isAuthError, setAuthError ] = useState(false);
 
 
@@ -50,12 +52,16 @@ const SignInForm = () => {
                         'Authorization': token
                     }
                 });
-        
+                
+                setRepeatingSignIn(false);
+
                 if (!isAuth) {
                     setAuth(false);
                     setUser(null);
                     localStorage.removeItem('token');
                 }
+            } else {
+                setRepeatingSignIn(false);
             }
         })()
     }, []);
@@ -84,43 +90,50 @@ const SignInForm = () => {
 
 
     return (
-        <form
-            className="sign-in-form"
-            onSubmit={ signInUser }
-        >
-            <h2>Sign in</h2>
+        <>
+            { isRepeatingSignIn
+                ? <h3>
+                    Loading
+                </h3>
+                : <form
+                    className="sign-in-form"
+                    onSubmit={ signInUser }
+                >
+                    <h2>Sign in</h2>
 
-            { isAuthError
-            && <h3>
-                The Email or Password is incorrect<br />
-                Please try again
-            </h3> }
+                    { isAuthError
+                    && <h3>
+                        The Email or Password is incorrect<br />
+                        Please try again
+                    </h3> }
 
-            <div className="form-control-container">
-                <label htmlFor="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    value={ email }
-                    onChange={ event => setEmail(event.target.value) }
-                    required
-                />
-            </div>
+                    <div className="form-control-container">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            value={ email }
+                            onChange={ event => setEmail(event.target.value) }
+                            required
+                        />
+                    </div>
 
-            <div className="form-control-container">
-                <label htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    value={ password }
-                    onChange={ event => setPassword(event.target.value) }
-                    required
-                />
-            </div>
+                    <div className="form-control-container">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={ password }
+                            onChange={ event => setPassword(event.target.value) }
+                            required
+                        />
+                    </div>
 
-            <button type="submit">Sign in</button>
-            <Link to="/registration">Register</Link>
-        </form>
+                    <button type="submit">Sign in</button>
+                    <Link to="/registration">Register</Link>
+                </form>
+            }
+        </>
     );
 }
 

@@ -9,6 +9,7 @@ router.get('/user/:id', dbController.getUser);
 router.post('/user/:id', dbController.updateUser);
 router.post('/register', dbController.registerUser);
 router.post('/signin', dbController.signinUser);
+router.post('/signout', dbController.signoutUser);
 router.post('/image', faceRecognitionController.getFacePrediction);
 router.put('/entries', dbController.incrementEntries);
 

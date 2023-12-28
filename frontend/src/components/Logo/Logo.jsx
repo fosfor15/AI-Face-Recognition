@@ -6,6 +6,8 @@ import AuthContext from '../../context/AuthContext';
 import LogoMenu from '../LogoMenu/LogoMenu';
 import ProfileModal, { petsMap } from '../ProfileModal/ProfileModal';
 
+import axiosInstance from '../../network/axios-instance';
+
 import './Logo.css';
 
 
@@ -27,14 +29,20 @@ const Logo = () => {
         toggleModal(!isModalOpen);
     };
 
-    const signOut = () => {
-        setAuth(false);
-        localStorage.removeItem('isAuth');
-        
-        setUser(null);
-        localStorage.removeItem('user');
+    const signOut = async () => {
+        const token = localStorage.getItem('token');
 
-        localStorage.removeItem('token');
+        const response = await axiosInstance.post('/signout', {}, {
+            headers: {
+                'Authorization': token
+            }
+        });
+
+        if (!response.data.isAuth) {
+            setAuth(false);
+            setUser(null);
+            localStorage.removeItem('token');
+        }
     };
 
     return (

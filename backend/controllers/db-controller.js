@@ -51,6 +51,10 @@ const createSession = (userId, token) => {
     return redisClient.set(token, userId, cacheOptions);
 };
 
+const removeSession = (token) => {
+    return redisClient.del(token);
+};
+
 const checkSession = (token) => {
     return redisClient.get(token);
 };
@@ -177,6 +181,39 @@ const dbController = {
                         description: error.message
                     });
                 });
+        }
+    },
+
+    signoutUser(req, res) {
+        const { authorization: token } = req.headers;
+
+        if (token) {
+            checkSession(token)
+                .then(tokenUserId => {
+                    if (tokenUserId) {
+                        removeSession(token)
+                            .then(() => {
+                                res.status(200).send({
+                                    isAuth: false,
+                                    description: 'Signed out successfully'
+                                });
+                            });
+                    } else {
+                        res.status(200).send({
+                            isAuth: false,
+                            description: 'Already signed out'
+                        });
+                    }
+                })
+                .catch(error => {
+                    res.status(500).send({
+                        description: error.message
+                    });
+                });
+        } else {
+            res.status(401).send({
+                description: 'Unauthorized'
+            });
         }
     },
 
