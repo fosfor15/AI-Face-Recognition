@@ -61,28 +61,6 @@ const checkSession = (token) => {
 
 
 const dbController = {
-    incrementEntries(req, res) {
-        const { id } = req.body;
-
-        pool.query(`UPDATE users SET entries = entries + 1 WHERE id = ${id} RETURNING entries`)
-            .then(dbRes => {
-                const entries = dbRes.rows[0]?.entries;
-
-                if (!entries) {
-                    res.status(404).send({
-                        description: 'Unable to get user'
-                    });
-                } else {
-                    res.status(200).send({ entries });
-                }
-            })
-            .catch(error => {
-                res.status(500).send({
-                    description: error.message
-                });
-            });
-    },
-
     registerUser(req, res) {
         const { name, email, password } = req.body;
         const hash = hashPassword(password);
@@ -217,18 +195,6 @@ const dbController = {
         }
     },
 
-    getUsers(req, res) {
-        pool.query('SELECT * FROM users ORDER BY id ASC')
-            .then(dbRes =>
-                res.status(200).send(dbRes.rows)
-            )
-            .catch(error => {
-                res.status(500).send({
-                    description: error.message
-                });
-            });
-    },
-
     getUser(req, res) {
         const { id } = req.params;
 
@@ -282,7 +248,44 @@ const dbController = {
                     description: error.message
                 });
             });
-    },
+    }
+
+    // #region Commented methods
+    /* getUsers(req, res) {
+        pool.query('SELECT * FROM users ORDER BY id ASC')
+            .then(dbRes =>
+                res.status(200).send(dbRes.rows)
+            )
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
+    }, 
+    
+    incrementEntries(req, res) {
+        const { id } = req.body;
+
+        pool.query(`UPDATE users SET entries = entries + 1 WHERE id = ${id} RETURNING entries`)
+            .then(dbRes => {
+                const entries = dbRes.rows[0]?.entries;
+
+                if (!entries) {
+                    res.status(404).send({
+                        description: 'Unable to get user'
+                    });
+                } else {
+                    res.status(200).send({ entries });
+                }
+            })
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
+    } */
+    // #endregion
+
 };
 
 
