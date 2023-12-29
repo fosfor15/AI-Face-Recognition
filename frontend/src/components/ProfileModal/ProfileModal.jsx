@@ -71,7 +71,7 @@ const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
                     }
                 })
                 .catch(error => {
-                    console.log('error :>> ', error);
+                    console.error('error :>> ', error);
                 });
         }
     };
@@ -89,7 +89,7 @@ const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
                 <div className='profile-info'>
                     <div className='name'>
                         { user.name }
-                        { user.pet && <span className='pet'>{ petsMap.get(user.pet ?? 'kind-monster') }</span> }
+                        { <span className='pet'>{ petsMap.get(user.pet ?? 'kind-monster') }</span> }
                     </div>
 
                     { user.age &&

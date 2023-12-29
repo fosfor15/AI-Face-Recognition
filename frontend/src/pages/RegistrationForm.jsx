@@ -53,7 +53,7 @@ const RegistrationForm = () => {
                 }
             })
             .catch(error => {
-                console.log('error :>> ', error);
+                console.error('error :>> ', error);
             });
     };
 
