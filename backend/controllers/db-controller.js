@@ -1,7 +1,7 @@
 import pg from 'pg';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { createClient } from 'redis';
+
+import { hashPassword, checkPassword } from '../services/password-service.js';
+import { createToken, createSession, removeSession, checkSession } from '../services/session-service.js';
 
 
 const pool = new pg.Pool({
@@ -12,52 +12,6 @@ const pool = new pg.Pool({
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD
 });
-
-
-const redisClient = createClient({
-    url: process.env.REDIS_URL
-});
-
-redisClient.on('connect', () => console.log('Redis client is connected'));
-redisClient.on('error', error => console.log('Redis client Error', error));
-
-redisClient.connect();
-
-
-const saltRounds = Number(process.env.SALT_ROUNDS);
-
-const hashPassword = (password) => {
-    const salt = bcrypt.genSaltSync(saltRounds);
-    return bcrypt.hashSync(password, salt);
-};
-
-const checkPassword = (password, hash = '') => {
-    return bcrypt.compareSync(password, hash);
-};
-
-
-const createToken = (email) => {
-    const jwtPayload = { email };
-    const jwtOptions = { expiresIn: 86_400 };
-
-    return jwt.sign(jwtPayload, process.env.JWT_SECRET, jwtOptions);
-};
-
-const createSession = (userId, token) => {
-    const cacheOptions = {
-        EX: 3600
-    };
-
-    return redisClient.set(token, userId, cacheOptions);
-};
-
-const removeSession = (token) => {
-    return redisClient.del(token);
-};
-
-const checkSession = (token) => {
-    return redisClient.get(token);
-};
 
 
 const dbController = {
@@ -105,7 +59,7 @@ const dbController = {
 
         if (token) {
             checkSession(token)
-                .then(userId => {                    
+                .then(userId => {
                     if (userId) {
                         res.status(200).send({
                             isAuth: true,
@@ -165,34 +119,18 @@ const dbController = {
     signoutUser(req, res) {
         const { authorization: token } = req.headers;
 
-        if (token) {
-            checkSession(token)
-                .then(tokenUserId => {
-                    if (tokenUserId) {
-                        removeSession(token)
-                            .then(() => {
-                                res.status(200).send({
-                                    isAuth: false,
-                                    description: 'Signed out successfully'
-                                });
-                            });
-                    } else {
-                        res.status(200).send({
-                            isAuth: false,
-                            description: 'Already signed out'
-                        });
-                    }
-                })
-                .catch(error => {
-                    res.status(500).send({
-                        description: error.message
-                    });
+        removeSession(token)
+            .then(() => {
+                res.status(200).send({
+                    isAuth: false,
+                    description: 'Signed out successfully'
                 });
-        } else {
-            res.status(401).send({
-                description: 'Unauthorized'
+            })
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
             });
-        }
     },
 
     getUser(req, res) {
