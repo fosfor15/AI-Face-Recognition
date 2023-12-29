@@ -15,6 +15,7 @@ const SignInForm = () => {
     const [ password, setPassword ] = useState('');
 
     const [ isRepeatingSignIn, setRepeatingSignIn ] = useState(true);
+    const [ isWrongCredentials, setWrongCredentials ] = useState(false);
     const [ isAuthError, setAuthError ] = useState(false);
 
 
@@ -24,11 +25,14 @@ const SignInForm = () => {
 
         try {
             const response = await axiosInstance.post('/signin', body, { headers });
-            const { isAuth } = response.data;
+            const { isAuth = false } = response.data;
     
             if (isAuth) {
                 const { userId, token } = response.data;
-                const { data: user } = await axiosInstance.get(`/user/${userId}`);
+
+                const { data: user } = await axiosInstance.get(`/user/${userId}`, {
+                    headers: { 'Authorization': token }
+                });
                 
                 setUser(user);
                 localStorage.setItem('token', token);
@@ -37,10 +41,10 @@ const SignInForm = () => {
 
             return Promise.resolve({ isAuth });
         } catch (error) {
-            console.log('error :>> ', error);
+            setAuthError(true);
+            console.error('Auth error :>> ', error);
         }
     };
-
 
     useEffect(() => {
         (async () => {            
@@ -48,25 +52,20 @@ const SignInForm = () => {
         
             if (token) {
                 const { isAuth } = await requestSignIn({
-                    headers: {
-                        'Authorization': token
-                    }
+                    headers: { 'Authorization': token }
                 });
-                
-                setRepeatingSignIn(false);
 
                 if (!isAuth) {
                     setAuth(false);
                     setUser(null);
                     localStorage.removeItem('token');
                 }
-            } else {
-                setRepeatingSignIn(false);
             }
+
+            setRepeatingSignIn(false);
         })()
     }, []);
     
-
     const signInUser = async (event) => {
         event.preventDefault();
 
@@ -78,13 +77,9 @@ const SignInForm = () => {
         });
 
         if (!isAuth) {
-            setAuthError(true);
+            setWrongCredentials(true);
             setEmail('');
             setPassword('');
-
-            setTimeout(() => {
-                setAuthError(false);
-            }, 10e3);
         }
     };
 
@@ -92,20 +87,28 @@ const SignInForm = () => {
     return (
         <>
             { isRepeatingSignIn
-                ? <h3>
+                ? <h4>
                     Loading
-                </h3>
+                </h4>
                 : <form
                     className="sign-in-form"
                     onSubmit={ signInUser }
                 >
                     <h2>Sign in</h2>
 
-                    { isAuthError
-                    && <h3>
-                        The Email or Password is incorrect<br />
-                        Please try again
-                    </h3> }
+                    { isWrongCredentials &&
+                        <h4>
+                            The Email or Password is incorrect<br />
+                            Please try again with correct ones
+                        </h4>
+                    }
+
+                    { isAuthError &&
+                        <h4>
+                            Authentication error<br />
+                            Please try again later
+                        </h4>
+                    }
 
                     <div className="form-control-container">
                         <label htmlFor="email">Email</label>
