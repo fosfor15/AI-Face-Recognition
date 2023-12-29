@@ -33,9 +33,7 @@ const Logo = () => {
         const token = localStorage.getItem('token');
 
         const response = await axiosInstance.post('/signout', {}, {
-            headers: {
-                'Authorization': token
-            }
+            headers: { 'Authorization': token }
         });
 
         if (!response.data.isAuth) {

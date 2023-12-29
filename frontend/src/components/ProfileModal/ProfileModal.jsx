@@ -32,7 +32,7 @@ export const petsMap = new Map([
 
 
 const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
-    const { user, setUser } = useContext(AuthContext);
+    const { user, setUser, setAuth } = useContext(AuthContext);
     
     const nameInput = createRef();
     const ageInput = createRef();
@@ -55,16 +55,20 @@ const ProfileModal = ({ isModalOpen, toggleProfileModal }) => {
         }
 
         if (Object.entries(userUpdateData).length) {
-            
-            axiosInstance.post(`/user/${user.id}`, userUpdateData)
+            axiosInstance.post(`/user/${user.id}`, userUpdateData, {
+                headers: { 'Authorization': localStorage.getItem('token') }
+            })
                 .then(response => {
                     const { user, description } = response.data;
 
                     if (user) {
                         setUser(user);
+                        console.log('description :>> ', description);
+                    } else if (!response.data.isAuth) {
+                        setAuth(false);
+                        setUser(null);
+                        localStorage.removeItem('token');
                     }
-
-                    console.log('description :>> ', description);
                 })
                 .catch(error => {
                     console.log('error :>> ', error);
