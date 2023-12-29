@@ -27,7 +27,7 @@ const convertBoundingBoxes = (boundingBoxes) => {
 };
 
 const ImageRecognition = () => {
-    const { user, setUser } = useContext(AuthContext);
+    const { user, setUser, setAuth } = useContext(AuthContext);
 
     const [ imageUrl, setImageUrl ] = useState('');
     const [ boundingBoxes, setBoundingBoxes ] = useState([]);
@@ -36,27 +36,40 @@ const ImageRecognition = () => {
         setImageUrl('');
         setBoundingBoxes([]);
 
-        axiosInstance.post('/image', { imageUrl })
+        axiosInstance.post('/image', { imageUrl }, {
+            headers: { 'Authorization': localStorage.getItem('token') }
+        })
             .then(response => {
-                const { boundingBoxes: initialBoundingBoxes } = response.data;
-                const boundingBoxes = convertBoundingBoxes(initialBoundingBoxes);
+                const success = response.data?.success;
 
-                setImageUrl(imageUrl);
-                setBoundingBoxes(boundingBoxes);
+                if (success) {
+                    const { boundingBoxes: initialBoundingBoxes } = response.data;
+                    const boundingBoxes = convertBoundingBoxes(initialBoundingBoxes);
+    
+                    setImageUrl(imageUrl);
+                    setBoundingBoxes(boundingBoxes);
+    
+                    setTimeout(() => {
+                        document.getElementsByClassName('image-recognition-result')[0].scrollIntoView(true);
+                    }, 50);
+    
+                    axiosInstance.put('/entries', { id: user.id }, {
+                        headers: { 'Authorization': localStorage.getItem('token') }
+                    })
+                    .then(response => {
+                        const { entries } = response.data;
+                        const updatedUser = { ...user, entries };
+                        setUser(updatedUser);
+                    });
 
-                setTimeout(() => {
-                    document.getElementsByClassName('image-recognition-result')[0].scrollIntoView(true);
-                }, 50);
-
-                return axiosInstance.put('/entries', { id: user.id });
-            })
-            .then(response => {
-                const { entries } = response.data;
-                const updatedUser = { ...user, entries };
-                setUser(updatedUser);
+                } else if (!response.data.isAuth) {
+                    setAuth(false);
+                    setUser(null);
+                    localStorage.removeItem('token');
+                }
             })
             .catch(error => {
-                console.log('error', error)
+                console.error('error', error)
             });
     };
 

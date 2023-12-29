@@ -20,8 +20,8 @@ const config = {
 const faceRecognitionController = {
     getFacePrediction(req, res) {
         requestClarify(req.body.imageUrl)
-            .then(boundingBoxes => {
-                res.status(200).send({ boundingBoxes });
+            .then(result => {
+                res.status(200).send(result);
             });
     }
 };
@@ -68,7 +68,10 @@ function requestClarify(imageUrl) {
                     return boundingBox;
                 });
 
-                resolve(boundingBoxes);
+                resolve({
+                    success: true,
+                    boundingBoxes
+                });
             });
         });
         

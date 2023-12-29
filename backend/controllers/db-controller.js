@@ -133,6 +133,21 @@ const dbController = {
             });
     },
 
+
+    // #region Commented test method
+    /* getUsers(req, res) {
+        pool.query('SELECT * FROM users ORDER BY id ASC')
+            .then(dbRes =>
+                res.status(200).send(dbRes.rows)
+            )
+            .catch(error => {
+                res.status(500).send({
+                    description: error.message
+                });
+            });
+    }, */
+    // #endregion
+
     getUser(req, res) {
         const { id } = req.params;
 
@@ -186,20 +201,8 @@ const dbController = {
                     description: error.message
                 });
             });
-    }
+    },
 
-    // #region Commented methods
-    /* getUsers(req, res) {
-        pool.query('SELECT * FROM users ORDER BY id ASC')
-            .then(dbRes =>
-                res.status(200).send(dbRes.rows)
-            )
-            .catch(error => {
-                res.status(500).send({
-                    description: error.message
-                });
-            });
-    }, 
     
     incrementEntries(req, res) {
         const { id } = req.body;
@@ -208,12 +211,12 @@ const dbController = {
             .then(dbRes => {
                 const entries = dbRes.rows[0]?.entries;
 
-                if (!entries) {
+                if (entries) {
+                    res.status(200).send({ entries });
+                } else {
                     res.status(404).send({
                         description: 'Unable to get user'
                     });
-                } else {
-                    res.status(200).send({ entries });
                 }
             })
             .catch(error => {
@@ -221,9 +224,7 @@ const dbController = {
                     description: error.message
                 });
             });
-    } */
-    // #endregion
-
+    }
 };
 
 

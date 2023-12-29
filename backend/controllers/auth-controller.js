@@ -1,4 +1,4 @@
-import { checkSession } from '../services/session-service.js';
+import { checkSession, getSessionExpiration, setSessionExpiration } from '../services/session-service.js';
 
 const authController = {
     requireAuth(req, res, next) {
@@ -26,6 +26,20 @@ const authController = {
                 description: 'Unauthorized'
             });
         }
+    },
+
+    checkAndExtendSession(req, res, next) {
+        const { authorization: token } = req.headers;
+
+        getSessionExpiration(token)
+            .then(sessionExpiration => {
+                if (sessionExpiration < 50) {
+                    return setSessionExpiration(token, 60);
+                }
+            })
+            .then(() => {
+                next();
+            });
     }
 };
 
